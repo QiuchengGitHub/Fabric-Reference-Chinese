@@ -5,9 +5,9 @@
 
 Hyperledger Fabric是一个分布式账本解决方案平台，支持模块化架构，提供高度机密性、弹性（resiliency）、灵活性和可扩展性。它被设计成支持不同组件的插拔式实现，并适用于整个经济生态系统中存在的复杂性（complexity and intricacies）。
 
-Hyperledger Fabric delivers a uniquely elastic and extensible architecture, distinguishing it from alternative blockchain solutions. Planning for the future of enterprise blockchain requires building on top of a fully-vetted, open source architecture; Hyperledger Fabric is your starting point.
+不同于其他区块链解决方案，Hyperledger Fabric提供了一个独特地弹性的（elastic）和可扩展的架构。规划企业区块链的未来需要建立在全面审核（fully-vetted）、开源的架构之上。Hyperledger Fabric就是你的起点。
 
-It’s recommended for first-time users to begin by going through the Getting Started section in order to gain familiarity with the Hyperledger Fabric components and the basic transaction flow. Once comfortable, continue exploring the library for demos, technical specifications, APIs, etc.
+我们推荐第一次使用的用户，从“入门”章节开始熟悉Hyperledger Fabric相关的一些组件和基础事务流（basic transaction flow）。理解了之后，再继续探究示例类库、技术规范（technical specifications）、APIs等等。
 
 <table>
 	<tr>
@@ -17,19 +17,18 @@ It’s recommended for first-time users to begin by going through the Getting St
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		If you have questions not addressed by this documentation, or run into issues with any of the tutorials, please visit the Still Have Questions? page for some tips on where to find additional help.
+		如果你有该文档未介绍到的问题，或者在运行任何教程时碰到了问题，请访问“十二、 仍有问题”章节来获取额外的帮助。
 		</td>
 	</tr>
 </table>
 
-Before diving in, watch how Hyperledger Fabric is Building a Blockchain for Business:
 
 ##目录##
-
 ###一、入门###
-####Prerequisites####
-#####Install cURL#####
-Download the latest version of the cURL tool if it is not already installed or if you get errors running the curl commands from the documentation.
+####预处理####
+#####安装 cURL#####
+如果你还没有安装cURL工具，请下载最新的版本进行安装。否则运行本文档的curl命令时会报错。
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -38,19 +37,21 @@ Download the latest version of the cURL tool if it is not already installed or i
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		If you’re on Windows please see the specific note on Windows extras below.
+		如果你是Windows操作系统使用者，请参考下方有关Windows的详细介绍。
 		</td>
 	</tr>
 </table>
-#####Docker and Docker Compose#####
-You will need the following installed on the platform on which you will be operating, or developing on (or for), Hyperledger Fabric:
 
-+ MacOSX, *nix, or Windows 10: Docker Docker version 17.06.2-ce or greater is required.
-+ Older versions of Windows: Docker Toolbox - again, Docker version Docker 17.06.2-ce or greater is required.
+#####Docker和Docker Compose#####
+你还需要安装下列Hyperledger Fabric所需相关工具：
 
-You can check the version of Docker you have installed with the following command from a terminal prompt:
++ MacOSX, *nix, 或 Windows 10: Docker 17.06.2-ce 或更高版本
++ 老版本Windows: Docker Toolbox，以及Docker 17.06.2-ce 或更高版本
+
+你可以在终端提示中使用下列命令来检查Docker版本：
 
 	docker --version
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -59,15 +60,18 @@ You can check the version of Docker you have installed with the following comman
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		Installing Docker for Mac or Windows, or Docker Toolbox will also install Docker Compose. If you already had Docker installed, you should check that you have Docker Compose version 1.14.0 or greater installed. If not, we recommend that you install a more recent version of Docker.
+		为Mac或Windows安装Docker或Docker Toolbox时，也需要安装Docker Compose。如果你已经安装了Docker，需要确认Docker Compose的版本为1.14.0或者更高。否则我们建议你重新安装一个新的版本来使用。
 		</td>
 	</tr>
 </table>
-You can check the version of Docker Compose you have installed with the following command from a terminal prompt:
+
+你可以在终端提示下使用下列命令来检查Docker Compose的版本：
 
 	docker-compose --version
-#####Go Programming Language#####
-Hyperledger Fabric uses the Go programming language 1.9.x for many of its components.
+
+#####Go编程语言#####
+Hyperledger Fabric的很多容器都使用了Go编程语言1.9.x。
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -76,16 +80,19 @@ Hyperledger Fabric uses the Go programming language 1.9.x for many of its compon
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		Building with Go version 1.8.x is not supported
+		不支持使用Go 1.8.x版本
+		<p>
 		Go - version 1.9.x
 		</td>
 	</tr>
 </table>
-Given that we will be writing chaincode programs in Go, there are two environment variables you will need to set properly; you can make these settings permanent by placing them in the appropriate startup file, such as your personal ~/.bashrc file if you are using the bash shell under Linux.
 
-First, you must set the environment variable GOPATH to point at the Go workspace containing the downloaded Fabric code base, with something like:
+鉴于要使用Go来编写chaincode程序，我们要正确设置两个环境变量。可以在合适的启动文件中加入环境变量来永久生效，比如如果你在Linux上使用bash shell，你可以修改你个人的 ~/。bashrc文件
+
+首先，你必须设置环境变量GOPATH来指定包含下载的Fabric代码的Go workspace:
 
 	export GOPATH=$HOME/go
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -94,18 +101,22 @@ First, you must set the environment variable GOPATH to point at the Go workspace
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		You must set the GOPATH variable
+		一定要设置GOPATH变量
 		<p>
-		Even though, in Linux, Go’s GOPATH variable can be a colon-separated list of directories, and will use a default value of $HOME/go if it is unset, the current Fabric build framework still requires you to set and export that variable, and it must contain only the single directory name for your Go workspace. (This restriction might be removed in a future release.)
+		即使在Linux中，GO的GopATH变量可以是一个冒号分隔的目录列表，如果未设置，将使用$home /Go的默认值，但是当前的Fabric构建框架仍然要求你设置并导出该变量，并且它必须只包含GO workspace的单个目录名。工作区。（此限制可能会在将来的版本中去除）。
 		</td>
 	</tr>
 </table>
-Second, you should (again, in the appropriate startup file) extend your command search path to include the Go bin directory, such as the following example for bash under Linux:
+
+其次，你需要（在适当的启动文件中）扩展你的命令搜索路径，使其包含Go的bin目录，例如在Linux下使用bash的示例：
 
 	export PATH=$PATH:$GOPATH/bin
-While this directory may not exist in a new Go workspace installation, it is populated later by the Fabric build system with a small number of Go executables used by other parts of the build system. So even if you currently have no such directory yet, extend your shell search path as above.
+
+即使在一个新的Go workspace安装路径中不存在该目录，Fabric构建系统也会在后期自动创建该目录。因此，如果你当前没有该目录，也需要如上扩展你的shell搜索路径。
+
 #####Node.js Runtime and NPM#####
-If you will be developing applications for Hyperledger Fabric leveraging the Hyperledger Fabric SDK for Node.js, you will need to have version 8.9.x of Node.js installed.
+如果你后期需要针对Hyperledger Fabric SDK做开发，你需要安装Node.js 8.9.x或更高版本。
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -114,12 +125,13 @@ If you will be developing applications for Hyperledger Fabric leveraging the Hyp
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		Node.js version 9.x is not supported at this time.
+		本次不支持Node.js 9.x版本
 		<p>
-		Node.js - version 8.9.x or greater
+		只支持Node.js - 8.9.x 或更高版本
 		</td>
 	</tr>
 </table>
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -128,12 +140,13 @@ If you will be developing applications for Hyperledger Fabric leveraging the Hyp
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		Installing Node.js will also install NPM, however it is recommended that you confirm the version of NPM installed. You can upgrade the npm tool with the following command:
+		安装Node.js时也要求安装NPM，我们建议你确认下所安装的NPM的版本。你可以使用下列命令来升级你的npm工具：
 		</td>
 	</tr>
 </table>
 
 	npm install npm@5.6.0 -g
+
 ######Python######
 <table>
 	<tr>
@@ -143,43 +156,52 @@ If you will be developing applications for Hyperledger Fabric leveraging the Hyp
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		The following applies to Ubuntu 16.04 users only.
+		下列只适用于Ubuntu 16.04版本使用者
 		</td>
 	</tr>
 </table>
-By default Ubuntu 16.04 comes with Python 3.5.1 installed as the python3 binary. The Fabric Node.js SDK requires an iteration of Python 2.7 in order for npm install operations to complete successfully. Retrieve the 2.7 version with the following command:
+
+默认情况下，Ubuntu 16.04使用的是基于python3类库的Python 3.5.1。Fabric Node.js SDK需要使用Python 2.7版本来确保npm操作正确完成。所有请使用下列命令回退（retrieve）到2.7版本：
 	
 	sudo apt-get install python
-Check your version(s):
+
+检查你的版本:
 	
 	python --version
+
 #####Windows extras#####
-If you are developing on Windows 7, you will want to work within the Docker Quickstart Terminal which uses Git Bash and provides a better alternative to the built-in Windows shell.
+如何你在Windows 7上进行开发，你会倾向于在Docker Quickstart终端里使用Git Bash而不是内置的Windows shell。
 
-However experience has shown this to be a poor development environment with limited functionality. It is suitable to run Docker based scenarios, such as Getting Started, but you may have difficulties with operations involving the make and docker commands.
+虽然经验告诉我们Windows是一个局限性的开发环境。但是跑一些Docker基础场景还是可以的，比如入门章节的内容，但是你在使用make和docker命令时可能会碰到一些问题。
 
-On Windows 10 you should use the native Docker distribution and you may use the Windows PowerShell. However, for the Download Platform-specific Binaries command to succeed you will still need to have the uname command available. You can get it as part of Git but beware that only the 64bit version is supported.
+在Windows 10上，你应该使用本地Docker分布式，并且可以使用Windows PowerShell。但是，对于下载平台特定的二进制命令要执行成功，您仍然需要unMAME命令可用。您可以将其作为Git的一部分，但要注意仅支持64位版本。
 
-Before running any git clone commands, run the following commands:
+在运行任何git clone命令之前，先运行下列命令：
 
 	git config --global core.autocrlf false
 	git config --global core.longpaths true
-You can check the setting of these parameters with the following commands:
+
+你可以使用下列命令来检查参数设置：
+
 	git config --get core.autocrlf
 	git config --get core.longpaths
-These need to be false and true respectively.
 
-The curl command that comes with Git and Docker Toolbox is old and does not handle properly the redirect used in Getting Started. Make sure you install and use a newer version from the cURL downloads page
+这些需要分别被设置为false和true。
 
-For Node.js you also need the necessary Visual Studio C++ Build Tools which are freely available and can be installed with the following command:
+Git和Docker Toolbox自带的curl命令是旧版本的，无法正确处理在开始时使用的重定向。请确保从cURL下载页面安装并使用较新版本。
+
+对于Node.js，你也需要必需的Visual Studio C++构建工具，该工具是免费的并可以使用下列命令安装：
 
 	npm install --global windows-build-tools
-See the NPM windows-build-tools page for more details.
 
-Once this is done, you should also install the NPM GRPC module with the following command:
+参考NPM windows-build-tools页面（https://www.npmjs.com/package/windows-build-tools）以获得更多信息。
+
+完成之后，你可以使用下列命令来安装NPM GRPC模块：
 
 	npm install --global grpc
-Your environment should now be ready to go through the Getting Started samples and tutorials.
+
+截止目前，你的环境应该已经准备完毕了。
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -188,10 +210,11 @@ Your environment should now be ready to go through the Getting Started samples a
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		If you have questions not addressed by this documentation, or run into issues with any of the tutorials, please visit the Still Have Questions? page for some tips on where to find additional help.
+		如果你有该文档未介绍到的问题，或者在运行任何教程时碰到了问题，请访问“十二、 仍有问题”章节来获取额外的帮助。
 		</td>
 	</tr>
 </table>
+
 ####Hyperledger Fabric Samples####
 <table>
 	<tr>
@@ -201,21 +224,23 @@ Your environment should now be ready to go through the Getting Started samples a
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		If you are running on Windows you will want to make use of the Docker Quickstart Terminal for the upcoming terminal commands. Please visit the Prerequisites if you haven’t previously installed it.
+		如果你的运行环境是Windows，你需要用到Docker Quickstart终端来执行后面的终端命令。如果你还没有安装，请参考“预处理”章节完成安装。
 		<p>
-		If you are using Docker Toolbox on Windows 7 or macOS, you will need to use a location under C:\Users (Windows 7) or /Users (macOS) when installing and running the samples.
+		如果你使用的是Windows 7或者macOS上的Docker Toolbox，当安装和执行示例时，你会用到如下路径：C\Users（Windows 7）或 /Users（macOS）。
 		<p>
-		If you are using Docker for Mac, you will need to use a location under /Users, /Volumes, /private, or /tmp. To use a different location, please consult the Docker documentation for file sharing.
+		如果你使用的是Mac上的Docker，你需要使用如下路径：/Users，/Volumes，/private或/tmp。如果要使用另一个路径，请参考Docker文档。
 		<p>
-		If you are using Docker for Windows, please consult the Docker documentation for shared drives and use a location under one of the shared drives.
+		如果你使用的是Windows上的Docker，请参阅Docker文档的共享驱动器，并使用一个共享驱动器下的位置。
 		</td>
 	</tr>
 </table>
-Determine a location on your machine where you want to place the Hyperledger Fabric samples applications repository and open that in a terminal window. Then, execute the following commands:
+
+在你的机器上选择一个路径，该路径用于放置Hyperledger Fabric示例程序。在终端窗口中执行下列命令：
 
 	git clone -b master https://github.com/hyperledger/fabric-samples.git
 	cd fabric-samples
 	git checkout {TAG}
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -224,62 +249,67 @@ Determine a location on your machine where you want to place the Hyperledger Fab
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		To ensure the samples are compatible with the version of Fabric binaries you download below, checkout the samples {TAG} that matches your Fabric version, for example, v1.1.0. To see a list of all fabric-samples tags, use command “git tag”.
+		为了确保这些样本与之前下载的BRAGE二进制文件兼容，请坚持示例{TAG}是否匹配你的Fabric版本，例如，v1.1.0。要查看所有fabric示例tags，请使用“git tag”命令。
 		</td>
 	</tr>
 </table>
-#####Download Platform-specific Binaries#####
-Next, we will install the Hyperledger Fabric platform-specific binaries. This process was designed to complement the Hyperledger Fabric Samples above, but can be used independently. If you are not installing the samples above, then simply create and enter a directory into which to extract the contents of the platform-specific binaries.
 
-Please execute the following command from within the directory into which you will extract the platform-specific binaries:
+#####下载平台特定的二进制文件#####
+下面，我们将安装Hyperledger Fabric平台特定二进制文件。该过程被设计为补充上面的Hyperledger Fabric示例，但是也可以独立使用。如果您没有安装上面的示例，那么简单地创建并输入一个目录，以提取平台特定二进制文件的内容。
+
+进入指定的目录，执行下面的命令：
 
 	curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
-<table>
-	<tr>
-		<td bgcolor=#6A5ACD>
-			<img src="images/tip1.png" style="height:16px;width=16px;"> 注意
-		</td>
-	</tr>
-	<tr>
-		<td bgcolor=#7FFFD4>
-		If you get an error running the above curl command, you may have too old a version of curl that does not handle redirects or an unsupported environment.
-		<p>
-		Please visit the Prerequisites page for additional information on where to find the latest version of curl and get the right environment. Alternately, you can substitute the un-shortened URL: https://github.com/hyperledger/fabric/blob/master/scripts/bootstrap.sh
-		</td>
-	</tr>
-</table>
-<table>
-	<tr>
-		<td bgcolor=#6A5ACD>
-			<img src="images/tip1.png" style="height:16px;width=16px;"> 注意
-		</td>
-	</tr>
-	<tr>
-		<td bgcolor=#7FFFD4>
-		You can use the command above for any published version of Hyperledger Fabric. Simply replace ‘1.1.0’ with the version identifier of the version you wish to install.
-		</td>
-	</tr>
-</table>
-The command above downloads and executes a bash script that will download and extract all of the platform-specific binaries you will need to set up your network and place them into the cloned repo you created above. It retrieves four platform-specific binaries:
 
-+ cryptogen
-+ configtxgen
-+ configtxlator
+<table>
+	<tr>
+		<td bgcolor=#6A5ACD>
+			<img src="images/tip1.png" style="height:16px;width=16px;"> 注意
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor=#7FFFD4>
+		如果在运行上述命令时报错，可能是因为当前环境不支持该命令或者你的curl版本太老了。
+		<p>
+		请访问“预处理”章节获取相关信息。或者，你可以替换未缩短的URL：https://github.com/hyperledger/fabric/blob/master/scripts/bootstrap.sh
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td bgcolor=#6A5ACD>
+			<img src="images/tip1.png" style="height:16px;width=16px;"> 注意
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor=#7FFFD4>
+		你可以针对任何发布的Hyperledger Fabric版本执行上述命令。只需将“1.1.0”这个版本号做相应替换即可。
+		</td>
+	</tr>
+</table>
+
+上述命令下载并执行BASH脚本，该脚本将下载和提取所有设置网络所需的特定平台二进制文件，并将它们放置到上面创建的克隆目录中。它检索四个平台特定二进制文件：
+
++ cryptogen，
++ configtxgen，
++ configtxlator，
 + peer
 + orderer and
 + fabric-ca-client
 
-and places them in the bin sub-directory of the current working directory.
+并将他们放置在当前工作目录的bin子目录中。
 
-You may want to add that to your PATH environment variable so that these can be picked up without fully qualifying the path to each binary. e.g.:
+您可能希望将其添加到路径环境变量中，以便可以在不完全限定每个二进制路径的情况下拾取这些变量。例如：
 
 	export PATH=<path to download location>/bin:$PATH
 
-Finally, the script will download the Hyperledger Fabric docker images from Docker Hub into your local Docker registry and tag them as ‘latest’.
+最终，该脚本会从Docker Hub下载Hyperledger Fabric docker镜像到你本地并标记他们为“latest”。
 
-The script lists out the Docker images installed upon conclusion.
+脚本列出了结束后安装的所有Docker镜像列表。
 
-Look at the names for each image; these are the components that will ultimately comprise our Hyperledger Fabric network. You will also notice that you have two instances of the same image ID - one tagged as “x86_64-1.x.x” and one tagged as “latest”.
+查看每个镜像的名称；这些组件将最终构成我们的Hyperledger Fabric网络。你将会注意到，你有两个实例是相同的镜像ID - 一个标记为“x86_64-1.x.x”而另一个标记为“latest”。
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -288,10 +318,11 @@ Look at the names for each image; these are the components that will ultimately 
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		On different architectures, the x86_64 would be replaced with the string identifying your architecture.
+		在不同的架构中，x86_64会被你自己架构的字符识别码做替换。
 		</td>
 	</tr>
 </table>
+
 <table>
 	<tr>
 		<td bgcolor=#6A5ACD>
@@ -300,522 +331,588 @@ Look at the names for each image; these are the components that will ultimately 
 	</tr>
 	<tr>
 		<td bgcolor=#7FFFD4>
-		If you have questions not addressed by this documentation, or run into issues with any of the tutorials, please visit the Still Have Questions? page for some tips on where to find additional help.
+		如果你有该文档未介绍到的问题，或者在运行任何教程时碰到了问题，请访问“十二、 仍有问题”章节来获取额外的帮助。
 		</td>
 	</tr>
 </table>
+
 ####Install Prerequisites####
-Before we begin, if you haven’t already done so, you may wish to check that you have all the Prerequisites installed on the platform(s) on which you’ll be developing blockchain applications and/or operating Hyperledger Fabric.
+在我们开始之前，希望你能检查你已经完成了所以的准备工作。
+
 ####Install Binaries and Docker Images####
-While we work on developing real installers for the Hyperledger Fabric binaries, we provide a script that will Download Platform-specific Binaries to your system. The script also will download the Docker images to your local registry.
+为Hyperledger Fabric二进制文件开发真正的安装程序时，我们提供了一个脚本，它将下载特定于平台的二进制文件到你的系统。脚本还将下载Docker镜像到您的本地注册表
+
 ####Hyperledger Fabric Samples####
-We offer a set of sample applications that you may wish to install these Hyperledger Fabric Samples before starting with the tutorials as the tutorials leverage the sample code.
+我们提供了一系列示例程序，在开始教程之前，你可以安装并运行这些示例。
+
 ####API Documentation####
-The API documentation for Hyperledger Fabric’s Golang APIs can be found on the godoc site for Fabric. If you plan on doing any development using these APIs, you may want to bookmark those links now.
+Hyperledger Fabric的Golang API文档可以在Fabric的godoc站点（https://godoc.org/github.com/hyperledger/fabric）找到。
+
 ####Hyperledger Fabric SDKs####
-Hyperledger Fabric offers a number of SDKs to support various programming languages. There are two officially released SDKs for Node.js and Java:
+Hyperledger Fabric提供了多种SDKs来支持多编程语言。 下面是两个正式发布的SDKs:Node.js和Java：
 
-+ Hyperledger Fabric Node SDK and Node SDK documentation.
-+ Hyperledger Fabric Java SDK.
++ Hyperledger Fabric Node SDK（https://github.com/hyperledger/fabric-sdk-node）和Node SDK documentation（https://fabric-sdk-node.github.io/）.
++ Hyperledger Fabric Java SDK（https://github.com/hyperledger/fabric-sdk-java）.
 
-In addition, there are three more SDKs that have not yet been officially released (for Python, Go and REST), but they are still available for downloading and testing:
+此外，还有三个还没正式发布的SDKs（Python、Go和REST），但是可以自由下载和测试：
 
-+ Hyperledger Fabric Python SDK.
-+ Hyperledger Fabric Go SDK.
-+ Hyperledger Fabric REST SDK.
++ Hyperledger Fabric Python SDK.（https://github.com/hyperledger/fabric-sdk-py）
++ Hyperledger Fabric Go SDK.（https://github.com/hyperledger/fabric-sdk-go）
++ Hyperledger Fabric REST SDK.（https://github.com/hyperledger/fabric-sdk-rest）
+
 ####Hyperledger Fabric CA####
-Hyperledger Fabric provides an optional certificate authority service that you may choose to use to generate the certificates and key material to configure and manage identity in your blockchain network. However, any CA that can generate ECDSA certificates may be used.
+Hyperledger Fabric提供了可选的证书认证服务，您可以选择使用它来生成证书和关键材料，以配置和管理区块链网络中的身份。然而，任何可以生成ECDSA证书的CA认证方式都可以被接入进来使用。
 
 ###二、核心概念###
-####Introduction####
-Hyperledger Fabric is a platform for distributed ledger solutions underpinned by a modular architecture delivering high degrees of confidentiality, resiliency, flexibility and scalability. It is designed to support pluggable implementations of different components and accommodate the complexity and intricacies that exist across the economic ecosystem.
+####介绍####
+Hyperledger Fabric是一个分布式账本解决方案平台，支持模块化架构，提供高度机密性、弹性（resiliency）、灵活性和可扩展性。它被设计成支持不同组件的插拔式实现，并适用于整个经济生态系统中存在的复杂性（complexity and intricacies）。
 
-Hyperledger Fabric delivers a uniquely elastic and extensible architecture, distinguishing it from alternative blockchain solutions. Planning for the future of enterprise blockchain requires building on top of a fully vetted, open-source architecture; Hyperledger Fabric is your starting point.
+不同于其他区块链解决方案，Hyperledger Fabric提供了一个独特地弹性的（elastic）和可扩展的架构。规划企业区块链的未来需要建立在全面审核（fully-vetted）、开源的架构之上。Hyperledger Fabric就是你的起点。
 
-We recommend first-time users begin by going through the rest of the introduction below in order to gain familiarity with how blockchains work and with the specific features and components of Hyperledger Fabric.
+我们推荐第一次使用的用户，从“入门”章节开始熟悉Hyperledger Fabric相关的一些组件和基础事务流（basic transaction flow）。理解了之后，再继续探究示例类库、技术规范（technical specifications）、APIs等等。
 
-Once comfortable – or if you’re already familiar with blockchain and Hyperledger Fabric – go to Getting Started and from there explore the demos, technical specifications, APIs, etc.
-####What is a Blockchain?####
-#####A Distributed Ledger#####
-At the heart of a blockchain network is a distributed ledger that records all the transactions that take place on the network.
+#####Blockchain是什么?#####
+######一个分布式账本######
+区块链网络的核心是一个分布式账本，该账本记录了网络中发生的所有交易。
 
-A blockchain ledger is often described as decentralized because it is replicated across many network participants, each of whom collaborate in its maintenance. We’ll see that decentralization and collaboration are powerful attributes that mirror the way businesses exchange goods and services in the real world.
+区块链账本通常被描述为是分权的，因为网络中每一个参与者都拥有完整的备份，并且每个参与者都在维护中进行协作。我们知道，分权和协作是反映企业在现实世界中交换商品和服务的强有力的属性。
+
 ![](images/basic_network.png)
-In addition to being decentralized and collaborative, the information recorded to a blockchain is append-only, using cryptographic techniques that guarantee that once a transaction has been added to the ledger it cannot be modified. This property of immutability makes it simple to determine the provenance of information because participants can be sure information has not been changed after the fact. It’s why blockchains are sometimes described as systems of proof.
-#####Smart Contracts#####
-To support the consistent update of information – and to enable a whole host of ledger functions (transacting, querying, etc) – a blockchain network uses smart contracts to provide controlled access to the ledger.
+
+除了分权和协作，记录到区块链的信息只支持追加，通过使用加密技术来保证一旦交易被添加到账本，它就不能被修改。这种不可修改的特性使得确定信息的来源很简单，因为参与者可以确信信息在创建之后没有被改变。这就是为什么区块链有时被描述为证据系统。
+
+######智能合约######
+为了支持信息的一致更新，并实现整个账本功能（交易、查询等）——区块链网络使用智能合约来提供对账本的访问控制。
+
 ![](images/Smart_Contract.png)
-Smart contracts are not only a key mechanism for encapsulating information and keeping it simple across the network, they can also be written to allow participants to execute certain aspects of transactions automatically.
 
-A smart contract can, for example, be written to stipulate the cost of shipping an item that changes depending on when it arrives. With the terms agreed to by both parties and written to the ledger, the appropriate funds change hands automatically when the item is received.
-#####Consensus#####
-The process of keeping the ledger transactions synchronized across the network – to ensure that ledgers update only when transactions are approved by the appropriate participants, and that when ledgers do update, they update with the same transactions in the same order – is called consensus.
+智能合约不仅仅只是一种用于封装信息和保证简单跨网络传输的关键机制，它也可以被改写来允许参与者自动执行事务某些方面的工作。
+
+例如，一个智能合约可以被指定为规定一个物品的运输成本，该成本取决于它何时到达。当双方意见一致并写到账本时，会触发对应资金的自动转手。
+
+######共识（Consensus）######
+保持账本交易在网络中同步的过程-以确保只有当交易被适当的参与者批准时，账本才更新，而当账本进行更新时，它们以相同的顺序更新同一交易-被称为共识。
+
 ![](images/consensus.png)
-We’ll learn a lot more about ledgers, smart contracts and consensus later. For now, it’s enough to think of a blockchain as a shared, replicated transaction system which is updated via smart contracts and kept consistently synchronized through a collaborative process called consensus.
-####Why is a Blockchain useful?####
-#####Today's Systems of Record#####
-The transactional networks of today are little more than slightly updated versions of networks that have existed since business records have been kept. The members of a business network transact with each other, but they maintain separate records of their transactions. And the things they’re transacting – whether it’s Flemish tapestries in the 16th century or the securities of today – must have their provenance established each time they’re sold to ensure that the business selling an item possesses a chain of title verifying their ownership of it.
 
-What you’re left with is a business network that looks like this:
+后期我们会深度学习账本、智能合约和共识。对于现在，只要有如下认识即可：区块链是一个共享的、多备份的交易系统，使用智能合约来实现更新并通过共识机制来保持一致性同步。
+
+#####区块链为什么有用?#####
+######目前的记录系统######
+目前的交易网络只不过是自从业务记录被保存以来就存在的网络的稍有更新的版本。业务网络的成员相互交易，但他们保持各自的交易记录。而他们交易的东西——无论是十六世纪的佛兰芒挂毯还是今天的证券——每卖出一次就必须建立起它们的出处，以确保出售一项商品的商家拥有一系列所有权来验证其所有权。
+
+你所处的业务往来看起来如下所示：
+
 ![](images/current_network.png)
-Modern technology has taken this process from stone tablets and paper folders to hard drives and cloud platforms, but the underlying structure is the same. Unified systems for managing the identity of network participants do not exist, establishing provenance is so laborious it takes days to clear securities transactions (the world volume of which is numbered in the many trillions of dollars), contracts must be signed and executed manually, and every database in the system contains unique information and therefore represents a single point of failure.
 
-It’s impossible with today’s fractured approach to information and process sharing to build a system of record that spans a business network, even though the needs of visibility and trust are clear.
-#####The Blockchain Difference#####
-What if, instead of the rat’s nest of inefficiencies represented by the “modern” system of transactions, business networks had standard methods for establishing identity on the network, executing transactions, and storing data? What if establishing the provenance of an asset could be determined by looking through a list of transactions that, once written, cannot be changed, and can therefore be trusted?
+现代技术已经把这个过程从石板和纸文件夹搬到了硬盘和云平台，但底层结构是相同的。管理网络参与者身份的统一系统是不存在的，建立出处是费力的，需要数天的时间来清除证券交易（世界上的证券交易数有数万亿美元），合同必须手动签署和执行，并且系统中的每一个数据库包含唯一信息，因此只能表示单点故障。
 
-That business network would look more like this:
+基于现状来构建一个跨业务网络的记录系统来共享信息和过程是不可能实现的，即使可见度和信任度的需求是明确的、迫切的。
+
+######区块链不同之处######
+如果不是由“现代”交易系统所代表的低效巢，那么商业网络就有了在网络上建立身份、执行交易和存储数据的标准方法吗？如果建立一个资产的来源，可以通过查阅一笔交易，一旦被写入，不能被改变，因此可以被信任。（What if, instead of the rat’s nest of inefficiencies represented by the “modern” system of transactions, business networks had standard methods for establishing identity on the network, executing transactions, and storing data? What if establishing the provenance of an asset could be determined by looking through a list of transactions that, once written, cannot be changed, and can therefore be trusted?)
+
+那么业务网络会看起来如下所示：
+
 ![](images/future_net.png)
-This is a blockchain network, wherein every participant has their own replicated copy of the ledger. In addition to ledger information being shared, the processes which update the ledger are also shared. Unlike today’s systems, where a participant’s private programs are used to update their private ledgers, a blockchain system has shared programs to update shared ledgers.
 
-With the ability to coordinate their business network through a shared ledger, blockchain networks can reduce the time, cost, and risk associated with private information and processing while improving trust and visibility.
+这是一个区块链网络，每个参与者都有自己的账本副本。除了账本信息被共享，更新账本的过程也会被共享。不像当前的系统，一个参与者的私有程序才能更新它的私有账本，一个区块链系统有共享程序来更新共享账本。
 
-You now know what blockchain is and why it’s useful. There are a lot of other details that are important, but they all relate to these fundamental ideas of the sharing of information and processes.
-####What is Hyperledger Fabric?####
-The Linux Foundation founded Hyperledger in 2015 to advance cross-industry blockchain technologies. Rather than declaring a single blockchain standard, it encourages a collaborative approach to developing blockchain technologies via a community process, with intellectual property rights that encourage open development and the adoption of key standards over time.
+有能力通过共享账本协调业务网络，区块链网络可以减少与私有信息和处理相关的时间、成本和风险，同时提高信任和可见性。
 
-Hyperledger Fabric is one of the blockchain projects within Hyperledger. Like other blockchain technologies, it has a ledger, uses smart contracts, and is a system by which participants manage their transactions.
+截至目前，你已经了解了区块链是有用的，并且了解了为什么区块链是有用的。还有一些其他的重要细节信息，但它们都是基于共享信息和处理的基础思想。
 
-Where Hyperledger Fabric breaks from some other blockchain systems is that it is private and permissioned. Rather than an open permissionless system that allows unknown identities to participate in the network (requiring protocols like Proof of Work to validate transactions and secure the network), the members of a Hyperledger Fabric network enroll through a trusted Membership Service Provider (MSP).
+#####Hyperledger Fabric是什么?#####
+Linux基金会在2015成立了Hyperledger来推动跨行业的区块链技术。它并不是宣布了一个单独的区块链标准，而是通过一个社区来鼓励开发区块链技术，其知识产权鼓励开放开发和随着时间的推移采用关键标准。
 
-Hyperledger Fabric also offers several pluggable options. Ledger data can be stored in multiple formats, consensus mechanisms can be swapped in and out, and different MSPs are supported.
+Hyperledger Fabric是Hyperledger中的一个区块链项目。类似于其他区块链技术，Hyperledger Fabric是一个账本，使用智能合约，并且是一个供参与者管理交易信息的系统。
 
-Hyperledger Fabric also offers the ability to create channels, allowing a group of participants to create a separate ledger of transactions. This is an especially important option for networks where some participants might be competitors and not want every transaction they make - a special price they’re offering to some participants and not others, for example - known to every participant. If two participants form a channel, then those participants – and no others – have copies of the ledger for that channel.
-#####Shared Ledger#####
-Hyperledger Fabric has a ledger subsystem comprising two components: the world state and the transaction log. Each participant has a copy of the ledger to every Hyperledger Fabric network they belong to.
+Hyperledger Fabric与其他区块链系统的区别是，它是私有的、有权限的。与允许未知的身份参与到网络（需要类似工作量证明Proof of Work协议来验证交易和保护网络）中的开放权限的系统不同，Hyperledger Fabric网络的成员通过一个信任的Membership Service Provider（MSP）来实现登记。
 
-The world state component describes the state of the ledger at a given point in time. It’s the database of the ledger. The transaction log component records all transactions which have resulted in the current value of the world state; it’s the update history for the world state. The ledger, then, is a combination of the world state database and the transaction log history.
+Hyperledger Fabric也提供了多个可插拔的选项。账本数据可以存储于多种格式，共识机制可以被换入和换出，并且支持不同的MSPs实现。
 
-The ledger has a replaceable data store for the world state. By default, this is a LevelDB key-value store database. The transaction log does not need to be pluggable. It simply records the before and after values of the ledger database being used by the blockchain network.
-#####Smart Contracts#####
-Hyperledger Fabric smart contracts are written in chaincode and are invoked by an application external to the blockchain when that application needs to interact with the ledger. In most cases, chaincode interacts only with the database component of the ledger, the world state (querying it, for example), and not the transaction log.
+Hyperledger Fabric也提供了创建channels的功能，允许一组参与者来创建一个分离的交易账本。 这是网络中一个特别重要的选项，因为其中一些参与者可能是竞争对手，不希望他们做的每一笔交易被所有参与者都知晓。例如，他们给部分参与者提供的额外的好处，而不是给所有参与者。如果两个参与者形成一个频道，那么这些参与者（而不是其他人）都有该频道的分类帐的副本。
 
-Chaincode can be implemented in several programming languages. The currently supported chaincode language is Go with support for Java and other languages coming in future releases.
-#####Privacy#####
-Depending on the needs of a network, participants in a Business-to-Business (B2B) network might be extremely sensitive about how much information they share. For other networks, privacy will not be a top concern.
+######共享账本######
+Hyperledger Fabric有一个账本子系统，包括两个组件：世界状态（the world state）和交易日志。对于所属的每一个Hyperledger Fabric网络，参与者都有一个账本的副本与之对应。
 
-Hyperledger Fabric supports networks where privacy (using channels) is a key operational requirement as well as networks that are comparatively open.
-#####Consensus#####
-Transactions must be written to the ledger in the order in which they occur, even though they might be between different sets of participants within the network. For this to happen, the order of transactions must be established and a method for rejecting bad transactions that have been inserted into the ledger in error (or maliciously) must be put into place.
+世界状态组件描述的是给定时间点的账本状态。它是账本数据库。交易日志组件记录所有影响世界状态当前值的交易信息，它是时间状态的变更历史记录。账本，就是由世界状态数据库和交易日志历史组成的。
 
-This is a thoroughly researched area of computer science, and there are many ways to achieve it, each with different trade-offs. For example, PBFT (Practical Byzantine Fault Tolerance) can provide a mechanism for file replicas to communicate with each other to keep each copy consistent, even in the event of corruption. Alternatively, in Bitcoin, ordering happens through a process called mining where competing computers race to solve a cryptographic puzzle which defines the order that all processes subsequently build upon.
+账本为世界状态提供了一个可替换的数据存储方式。默认情况下，是LevelDB类型的key-value存储数据库。交易日志是不需要实现可插拔的。它只是被区块链网络用来简单记录账本数据库的前后变化值。
 
-Hyperledger Fabric has been designed to allow network starters to choose a consensus mechanism that best represents the relationships that exist between participants. As with privacy, there is a spectrum of needs; from networks that are highly structured in their relationships to those that are more peer-to-peer.
+######智能合约######
+Hyperledger Fabric智能合约被写入chaincode并被区块链外部的应用所调用。当外部应用想操作账本时，调用智能合约即可。在绝大多数场景中，chaincode只作用于账本的数据库组件以及世界状态（比如，查询），而不与交易日志交互。
 
-We’ll learn more about the Hyperledger Fabric consensus mechanisms, which currently include SOLO, Kafka, and will soon extend to SBFT (Simplified Byzantine Fault Tolerance), in another document.
-####Where can I learn more?####
-#####Getting Started#####
-We provide a number of tutorials where you’ll be introduced to most of the key components within a blockchain network, learn more about how they interact with each other, and then you’ll actually get the code and run some simple transactions against a running blockchain network. We also provide tutorials for those of you thinking of operating a blockchain network using Hyperledger Fabric.
-#####Hyperledger Fabric Model#####
-A deeper look at the components and concepts brought up in this introduction as well as a few others and describes how they work together in a sample transaction flow.
-####Hyperledger Fabric Functionalities####
-Hyperledger Fabric is an implementation of distributed ledger technology (DLT) that delivers enterprise-ready network security, scalability, confidentiality and performance, in a modular blockchain architecture. Hyperledger Fabric delivers the following blockchain network functionalities:
-#####Identity management#####
-To enable permissioned networks, Hyperledger Fabric provides a membership identity service that manages user IDs and authenticates all participants on the network. Access control lists can be used to provide additional layers of permission through authorization of specific network operations. For example, a specific user ID could be permitted to invoke a chaincode application, but blocked from deploying new chaincode.
-#####Privacy and confidentiality#####
-Hyperledger Fabric enables competing business interests, and any groups that require private, confidential transactions, to coexist on the same permissioned network. Private channels are restricted messaging paths that can be used to provide transaction privacy and confidentiality for specific subsets of network members. All data, including transaction, member and channel information, on a channel are invisible and inaccessible to any network members not explicitly granted access to that channel.
-#####Efficient processing#####
-Hyperledger Fabric assigns network roles by node type. To provide concurrency and parallelism to the network, transaction execution is separated from transaction ordering and commitment. Executing transactions prior to ordering them enables each peer node to process multiple transactions simultaneously. This concurrent execution increases processing efficiency on each peer and accelerates delivery of transactions to the ordering service.
+Chaincode可以以多种编程语言来实现。目前支持Go和Java，其他的语言会在将来的版本得到支持。
 
-In addition to enabling parallel processing, the division of labor unburdens ordering nodes from the demands of transaction execution and ledger maintenance, while peer nodes are freed from ordering (consensus) workloads. This bifurcation of roles also limits the processing required for authorization and authentication; all peer nodes do not have to trust all ordering nodes, and vice versa, so processes on one can run independently of verification by the other.
-#####Chaincode functionality#####
-Chaincode applications encode logic that is invoked by specific types of transactions on the channel. Chaincode that defines parameters for a change of asset ownership, for example, ensures that all transactions that transfer ownership are subject to the same rules and requirements. System chaincode is distinguished as chaincode that defines operating parameters for the entire channel. Lifecycle and configuration system chaincode defines the rules for the channel; endorsement and validation system chaincode defines the requirements for endorsing and validating transactions.
-#####Modular design#####
-Hyperledger Fabric implements a modular architecture to provide functional choice to network designers. Specific algorithms for identity, ordering (consensus) and encryption, for example, can be plugged in to any Hyperledger Fabric network. The result is a universal blockchain architecture that any industry or public domain can adopt, with the assurance that its networks will be interoperable across market, regulatory and geographic boundaries.
-####Hyperledger Fabric Model####
-This section outlines the key design features woven into Hyperledger Fabric that fulfill its promise of a comprehensive, yet customizable, enterprise blockchain solution:
+######隐私######
+根据网络的需要，B2B网络中的参与者可能对他们共享了多少信息十分敏感。对于其他网络，隐私可能不是最关注的点之一。
 
-+ Assets - Asset definitions enable the exchange of almost anything with monetary value over the network, from whole foods to antique cars to currency futures.
-+ Chaincode - Chaincode execution is partitioned from transaction ordering, limiting the required levels of trust and verification across node types, and optimizing network scalability and performance.
-+ Ledger Features - The immutable, shared ledger encodes the entire transaction history for each channel, and includes SQL-like query capability for efficient auditing and dispute resolution.
-+ Privacy through Channels - Channels enable multi-lateral transactions with the high degrees of privacy and confidentiality required by competing businesses and regulated industries that exchange assets on a common network.
-+ Security & Membership Services - Permissioned membership provides a trusted blockchain network, where participants know that all transactions can be detected and traced by authorized regulators and auditors.
-+ Consensus - a unique approach to consensus enables the flexibility and scalability needed for the enterprise.
-#####Assets#####
-Assets can range from the tangible (real estate and hardware) to the intangible (contracts and intellectual property). Hyperledger Fabric provides the ability to modify assets using chaincode transactions.
+Hyperledger Fabric支持一个（使用channels）将隐私作为关键操作需求并相对开放的网络。
 
-Assets are represented in Hyperledger Fabric as a collection of key-value pairs, with state changes recorded as transactions on a Channel ledger. Assets can be represented in binary and/or JSON form.
+######共识######
+交易必须以其发生的顺序写到账本中，即使它们可能存在于网络中不同的参与者集合之间。要做到这一点，必须建立交易的顺序，并且必须建立驳回不良交易的方法，来剔除那些错误（或者恶意）插入到账本的交易信息。
 
-You can easily define and use assets in your Hyperledger Fabric applications using the Hyperledger Composer tool.
+这目前还是计算机科学的研究领域，并且有多种方式可以实现，但都有各自的利弊。例如，PBFT（Practical Byzantine Fault Tolerance）为文件备份提供了一种机制，即使在“腐败”的情况下也能使其在各节点间交互并保证备份一致性。此外，在Bitcoin中，排序是通过一个称为挖掘的过程发生的，在这个过程中，参与的计算机竞争来解决一个密码难题，它定义了所有进程随后建立的顺序。
+
+Hyperledger Fabric已经被设计成允许网络启动者选择最能代表参与者之间存在的关系的一致性机制。与隐私一样，存在着一系列需求；从关系高度结构化的网络到更对等的网络。
+
+我们会深度学习Hyperledger Fabric的共识机制，目前包括SOLO，Kafka并且很快将扩展到SBFT(Simplified Byzantine Fault Tolerance)。
+
+#####我可以从哪儿学到更多?#####
+######入门######
+我们提供了一系列教程，介绍了区块链网络中的大部分关键组件并讲解他们如何协同合作，你也在一个运行的区块链网络中获取源代码并运行一些示例。我们也提供了使用Hyperledger Fabric来操作区块链网络的教程。
+
+######Hyperledger Fabric模型######
+更深入地了解本文介绍的组件和概念以及其他几个方面，并描述它们如何在一个示例交易流中协同工作。
+#####Hyperledger Fabric功能#####
+Hyperledger Fabric是一个分布式账本技术（DLT,distributed ledger technology）实现。并以一个模块化的区块链架构驱动企业就绪（enterprise-ready）网络的安全，可扩展性，机密性以及性能。Hyperledger Fabric提供了下列区块链网络功能：
+#####身份管理#####
+为了实现权限网络，Hyperledger Fabric提供了一个会员身份服务来管理用户IDs和认证网络中的所有参与者。访问控制列表可用于通过授权特定的网络操作来提供额外的许可层。例如，可以允许特定的用户ID调用一个chaincode应用，但阻止其部署新的chaincode。
+#####隐私和机密性#####
+Hyperledger Fabric考虑到了商业利益的竞争，允许任何需要私密、机密交易的团体和其他团体共存于同一个权限网络之中。。私有channels信道是可用于为网络成员的特定子集提供交易私密性和机密性的受限消息路径。信道上的所有数据，包括交易、成员和channel信息，对任何未明确授予该channel访问权限的网络成员来说是不可访问的。
+#####高效处理#####
+Hyperledger Fabric按照节点类型分配网络角色。为了向网络提供并发性和并行性，交易的执行与交易的排序和提交是分离开的。先执行交易然后对交易进行排序的处理方式使每个peer节点能够同时处理多个交易。这种并发执行增加了每个peer的处理效率，并加速了向排序服务传递交易的效率。
+
+除了启用并行处理之外，分工也缓解了排序节点交易执行和账本维护的压力，同时也将peer节点从排序（共识）工作负担中解脱出来。角色的区分也限制了授权和认证所需的处理；所有peer节点不必信任所有的排序节点，反之亦然，因此一个节点上的进程可以独立于另一个节点运行。
+#####Chaincode功能#####
+Chaincode应用编码了逻辑，这些逻辑由channel上特定类型的交易来调用。例如，chaincode为资产所有权变化定义的参数，确保所有转移所有权的交易都遵循相同的规则和要求。系统chaincode为整个channel定义了操作参数。生命周期和configuration system chaincode为该channel定义了规则；背书（endorsement）和validation system chaincode定义了背书和验证交易的要求。
+#####模块化设计#####
+Hyperledger Fabric是模块化架构实现，为网络设计提供了功能选择。例如，用于身份、排序（共识）和加密的特定算法可以插入到任何Hyperledger Fabric网络中。好处是，实现了任何行业或公共领域都可以采用的通用区块链架构，并保证其网络可以跨市场、监管和地理边界进行互操作。
+####Hyperledger Fabric模型####
+本节概述了Hyperledger Fabric的关键设计特性，实现了一个全面但可定制的，企业级的区块链解决方案的承诺：
+
++ Assets - 资产定义允许网络上绝大多数有价值属性的东西进行交换，从古董车到货币期货。
++ Chaincode - Chaincode执行与交易排序是分开的，限制了跨节点类型的信任和验证所需的级别，并优化了网络可扩展性和性能。
++ 账本特性 - 不可变的、共享的账本针对每个channel进行整个交易历史的编码，并且通包括SQL类似的查询能力以进行有效的审计和争议解决。
++ Channels隐私 - Channels在一个共同的网络中实现了多方交易的高度隐私性和保密性，这也是竞争企业和管理产业所注重的。
++ 安全&会员服务 - 权限会员系统提供了一个可信的区块链网络，参与者知道所有交易可以被授权的监管者和审计员检测和跟踪。
++ 共识 - 一种独特的共识方式实现了企业需要的灵活性和可扩展性。
+#####资产#####
+资产可以是有形资产（房地产和硬件），也可以是无形资产（合同和知识产权）。Hyperledger Fabric使用chaincode交易提供了修改资产的功能。
+
+在Hyperledger Fabric中，资产是以键值对集合存在的，状态变化被记录为channel账本上的交易信息。资产可以用二进制和/或JSON格式表示。
+
+在你的Hyperledger Fabric应用中使用Hyperledger Composer工具就可以轻易地定义和使用资产。
 #####Chaincode#####
-Chaincode is software defining an asset or assets, and the transaction instructions for modifying the asset(s). In other words, it’s the business logic. Chaincode enforces the rules for reading or altering key value pairs or other state database information. Chaincode functions execute against the ledger’s current state database and are initiated through a transaction proposal. Chaincode execution results in a set of key value writes (write set) that can be submitted to the network and applied to the ledger on all peers.
-#####Ledger Features#####
-The ledger is the sequenced, tamper-resistant record of all state transitions in the fabric. State transitions are a result of chaincode invocations (‘transactions’) submitted by participating parties. Each transaction results in a set of asset key-value pairs that are committed to the ledger as creates, updates, or deletes.
+Chaincode是定义一个或多个资产的软件，以及用于修改资产的交易指令。换句话说，就是业务逻辑。Chaincode强制执行读取或更改键值对或其他状态数据库信息的规则。Chaincode针对账本的当前状态数据库执行操作，并通过交易提议发起。Chaincode执行导致一组键值写入（写集），它可以提交给网络并应用于所有peers上的账本。
+#####账本特性#####
+账本是Fabric中所有状态转变的有序的、防篡改的记录。状态转换是参与方提交的chaincode调用（“交易”）的结果。每笔交易都会产生一组资产键值对，这些资产键值对作为创建、更新或删除提交到账本。
 
-The ledger is comprised of a blockchain (‘chain’) to store the immutable, sequenced record in blocks, as well as a state database to maintain current fabric state. There is one ledger per channel. Each peer maintains a copy of the ledger for each channel of which they are a member.
+账本由区块链（“链”）组成，在blocks中存储不可变的、有序的记录，以及保持当前Fabric状态的一个状态数据库。每个channel都有一个账本。每个peer维护当前成员所属所有channel的账本副本。
 
-+ Query and update ledger using key-based lookups, range queries, and composite key queries
-+ Read-only queries using a rich query language (if using CouchDB as state database)
-+ Read-only history queries - Query ledger history for a key, enabling data provenance scenarios
-+ Transactions consist of the versions of keys/values that were read in chaincode (read set) and keys/values that were written in chaincode (write set)
-+ Transactions contain signatures of every endorsing peer and are submitted to ordering service
-+ Transactions are ordered into blocks and are “delivered” from an ordering service to peers on a channel
-+ Peers validate transactions against endorsement policies and enforce the policies
-+ Prior to appending a block, a versioning check is performed to ensure that states for assets that were read have not changed since chaincode execution time
-+ There is immutability once a transaction is validated and committed
-+ A channel’s ledger contains a configuration block defining policies, access control lists, and other pertinent information
-+ Channel’s contain Membership Service Provider instances allowing for crypto materials to be derived from different certificate authorities
++ 使用基于关键字的查找，范围查询和组合关键字查询来查询和更新账本
++ 使用rich查询语言只读查询（如果使用CouchDB作为状态数据库）
++ 只读历史查询 - 查询某个关键字的账本历史，开启数据来源场景
++ 交易是由在chaincode中读取和写入的键值对的版本组成的
++ 交易包含每个背书peer的签名并将提交给ordering service
++ 交易是以blocks的形式排序的，从一个ordering service被“分发”到一个channel上的peers上
++ Peers针对背书政策验证交易并强制执行该政策
++ 在追加一个block之前，会执行版本检查，以确保从chaincode执行时间以来所读取的资产的状态没有被改变
++ 一旦交易被验证和提交，就具有不可更改性
++ 一个channel的账本包含一个配置block，该block定义了政策、访问控制列表和其他相关信息
++ 通道包含成员资格服务提供者实例，允许来自不同证书颁发机构的加密材料
 
-See the Ledger topic for a deeper dive on the databases, storage structure, and “query-ability.”
-#####Privacy through Channels#####
-Hyperledger Fabric employs an immutable ledger on a per-channel basis, as well as chaincodes that can manipulate and modify the current state of assets (i.e. update key value pairs). A ledger exists in the scope of a channel - it can be shared across the entire network (assuming every participant is operating on one common channel) - or it can be privatized to only include a specific set of participants.
+请参阅账本主题，深入了解数据库、存储结构和“查询能力”。
+#####Channels隐私#####
+Hyperledger Fabric基于每个channel使用不可变的账本，以及可以操作和修改资产当前状态的chaincode（即更新键值对）。账本存在于channel的作用域中——它可以在整个网络上被共享（假设每个参与者都在一个公共channel上运行），或者它可以被私有化，只包括一组特定的参与者。
 
-In the latter scenario, these participants would create a separate channel and thereby isolate/segregate their transactions and ledger. In order to solve scenarios that want to bridge the gap between total transparency and privacy, chaincode can be installed only on peers that need to access the asset states to perform reads and writes (in other words, if a chaincode is not installed on a peer, it will not be able to properly interface with the ledger).
+在后一种场景中，这些参与者将创建一个单独的channel，从而隔离（isolate/segregate）他们的交易和账本。为了解决想要完全透明和隐私之间的鸿沟的场景，chaincode只能安装在需要访问资产状态来执行读和写的peers上（换句话说，如果一个chaincode没有安装在一个peer上，那么它就不能正确地与账本进行交互）。
 
-To further obfuscate the data, values within chaincode can be encrypted (in part or in total) using common cryptographic algorithms such as AES before sending transactions to the ordering service and appending blocks to the ledger. Once encrypted data has been written to the ledger, it can only be decrypted by a user in possession of the corresponding key that was used to generate the cipher text. For further details on chaincode encryption, see the Chaincode for Developers topic.
-#####Security & Membership Services#####
-Hyperledger Fabric underpins a transactional network where all participants have known identities. Public Key Infrastructure is used to generate cryptographic certificates which are tied to organizations, network components, and end users or client applications. As a result, data access control can be manipulated and governed on the broader network and on channel levels. This “permissioned” notion of Hyperledger Fabric, coupled with the existence and capabilities of channels, helps address scenarios where privacy and confidentiality are paramount concerns.
+为了进一步混淆数据，chaincode内的值可以使用诸如AES之类的常用加密算法在向排序服务发送交易并将块附加到分类帐之前加密（部分或全部）。一旦已加密的数据被写入到账本中，它只能被拥有生成密文相关秘钥权限的用户解密。有关chaincode加密的进一步细节，请参见开发人员主题的chaincode部分。
+#####安全&会员服务#####
+Hyperledger Fabric底层是交易网络，其中所有参与者身份都是确定的。公钥基础设施用于生成与组织、网络组件、终端用户或客户端应用程序相关联的密码证书。因此，可以在更宽的网络和channel级别上控制和管理数据访问权限。Hyperledger Fabric的这种“许可”的设计理念，再加上渠道的存在和能力，有助于解决那些最关注隐私和机密性的场景。
 
-See the Membership Service Providers (MSP) topic to better understand cryptographic implementations, and the sign, verify, authenticate approach used in Hyperledger Fabric.
-#####Consensus#####
-In distributed ledger technology, consensus has recently become synonymous with a specific algorithm, within a single function. However, consensus encompasses more than simply agreeing upon the order of transactions, and this differentiation is highlighted in Hyperledger Fabric through its fundamental role in the entire transaction flow, from proposal and endorsement, to ordering, validation and commitment. In a nutshell, consensus is defined as the full-circle verification of the correctness of a set of transactions comprising a block.
+请参阅会员服务提供者（MSP）主题，以更好地理解加密实现，以及在Hyperledger Fabric中使用的签名、验证、认证方法。
+#####共识#####
+在分布式账本技术中，共识最近成了单个方法中的一个特定算法的同义词。然而，共识不仅仅是简单地同意交易的顺序，而且这种理解上的差异，因其在整个交易流程中的基础性作用在Hyperledger Fabric中显得十分突出，从提案和背书，到排序、验证和提交。简而言之，共识定义为一组包含块的事务的正确性的全循环验证。
 
-Consensus is ultimately achieved when the order and results of a block’s transactions have met the explicit policy criteria checks. These checks and balances take place during the lifecycle of a transaction, and include the usage of endorsement policies to dictate which specific members must endorse a certain transaction class, as well as system chaincodes to ensure that these policies are enforced and upheld. Prior to commitment, the peers will employ these system chaincodes to make sure that enough endorsements are present, and that they were derived from the appropriate entities. Moreover, a versioning check will take place during which the current state of the ledger is agreed or consented upon, before any blocks containing transactions are appended to the ledger. This final check provides protection against double spend operations and other threats that might compromise data integrity, and allows for functions to be executed against non-static variables.
+当block中交易的顺序和结果满足明确的策略准则检查时，将最终达成共识。这些检查和权衡发生在交易的整个生命周期中，并且包括使用背书政策来指定哪些特定成员必须认可某一特定交易类别，以及确保这些政策在system chaincode得到执行和支持。在提交之前，peers会使用这些system chaincodes确认有足够的背书存在，并且它们来自适当的实体。此外，在包含交易的任何blocks被追加到账本之前，当账本的当前状态是同意或者赞同时，将执行版本检查。此最后检查提供了防止双重开销操作和可能危及数据完整性的其他威胁，并允许对非静态变量执行函数。
 
-In addition to the multitude of endorsement, validity and versioning checks that take place, there are also ongoing identity verifications happening in all directions of the transaction flow. Access control lists are implemented on hierarchal layers of the network (ordering service down to channels), and payloads are repeatedly signed, verified and authenticated as a transaction proposal passes through the different architectural components. To conclude, consensus is not merely limited to the agreed upon order of a batch of transactions, but rather, it is an overarching characterization that is achieved as a byproduct of the ongoing verifications that take place during a transaction’s journey from proposal to commitment.
+除了大量的背书，有效性和版本检查，也有不间断的身份验证发生于交易流程的各个方向。访问控制列表是基于网络的层次结构（从ordering service到channels）实现的，并且当payloads作为交易提案在不同的价格组件间传递时，会被反复的签名、验证和认证。总而言之，共识不只是局限于一批交易的商定顺序，而是一个总体特征，它是在交易从提议到提交的过程中发生的正在进行的验证的副产品。
 
-Check out the Transaction Flow diagram for a visual representation of consensus.
-####Identity####
-#####What is an Identity?#####
-The different actors in a blockchain network include peers, orderers, client applications, administrators and more. Each of these actors — active elements inside or outside a network able to consume services — has a digitial identity encapsulated in an X.509 digital certificate. These identities really matter because they determine the exact permissions over resources and access to information that actors have in a blockchain network.
+请查看共识的直观交易流程图（“六、架构参考”的“交易流程”章节）
+####身份####
+#####什么是身份?#####
+区块链网络中的不同角色包括peers、orderers、client应用、管理员等等。每一个参与者——网络内外部的能够消费服务的活跃元素——都有一个封装在X.509数字证书中的数字身份。这些身份真的很重要，因为它们决定了角色在区块链网络中对资源和信息的确切权限。
 
-A digital identity furthermore has some additional attributes that Fabric uses to determine permissions, and it gives the union of an identity and the associated attributes a special name — principal. Principals are just like userIDs or groupIDs, but a little more flexible because they can include a wide range of properties of an actor’s identity, such as the actor’s organization, organizational unit, role or even the actor’s specific identity. When we talk about principals, they are the properties which determine their permissions.
+数字身份还具有一些额外的属性，Fabric使用这些属性来确定权限，并且赋予了身份和相关属性联合一个特殊名称-主体（principal）。主体就像userIDs或groupIDs，但是更灵活一些，因为它们可以包括一个参与者身份的广泛属性，比如参与者的组织、组织单元、角色甚至参与者的特定身份。当我们谈论主体时，它们是决定其权限的属性。
 
-For an identity to be verifiable, it must come from a trusted authority. A membership service provider (MSP) is how this is achieved in Fabric. More specifically, an MSP is a component that defines the rules that govern the valid identities for this organization. The default MSP implementation in Fabric uses X.509 certificates as identities, adopting a traditional Public Key Infrastructure (PKI) hierarchical model (more on PKI later).
-#####A Simple Scenario to Explain the Use of an Identity#####
-Imagine that you visit a supermarket to buy some groceries. At the checkout you see a sign that says that only Visa, Mastercard and AMEX cards are accepted. If you try to pay with a different card — let’s call it an “ImagineCard” — it doesn’t matter whether the card is authentic and you have sufficient funds in your account. It will be not be accepted.
+对于一个可验证的身份，它必须来自一个可信的权威。会员服务提供者（MSP）就是Fabric中的实现。更具体地说，MSP是一个定义管理该组织的有效身份的规则的组件。Fabric中默认的MSP实现是使用X.509证书作为身份，采用传统的公钥基础设施（PKI）分层模型（稍后在PKI上更多）。
+#####一个展示身份用法的简单场景#####
+假定你逛一个超市要买一些商品。在出口处，你看见一个指示只接受Visa、MasterCard和AMEX卡的提示。如果你尝试使用其他卡来支付是不起作用的，即使该卡是真实有效并且确实账户上有钱。因为不接受这种类型的卡来支持。
+
 ![](images/identity.diagram.6.png)
-Having a valid credit card is not enough — it must also be accepted by the store! PKIs and MSPs work together in the same way — a PKI provides a list of identities, and an MSP says which of these are members of a given organization that participates in the network.
 
-PKI certificate authorities and MSPs provide a similar combination of functionalities. A PKI is like a card provider — it dispenses many different types of verifiable identities. An MSP, on the other hand, is like the list of card providers accepted by the store, determining which identities are the trusted members (actors) of the store payment network. MSPs turn verifiable identities into the members of a blockchain network.
+有一个有效的信用卡是不够的-它也必须被商店认可！PKIs和MSPs以相同的方式协同工作——PKI提供身份列表，而MSP表示其中哪些是参与网络的给定组织的成员。
 
-Let’s drill into these concepts in a little more detail.
-#####What are PKIs?#####
-A public key infrastructure (PKI) is a collection of internet technologies that provides secure communications in a network. It’s PKI that puts the S in HTTPS — and if you’re reading this documentation on a web browser, you’re probably using a PKI to make sure it comes from a verified source.
+PKI认证中心和MSPs提供了类似的功能组合。PKI就像一个银行卡发行商——它提供了许多不同类型的可验证的身份。另一方面，MSP类似于由商店认可的银行卡发行商列表，确定哪些身份是商店支付网络的可信成员（参与者）。MSPS将可验证的身份转换成区块链网络的成员。
+
+让我们进一步了解这些概念。
+#####什么是PKIs?#####
+公钥基础设施（PKI）是在网络中提供安全通信的互联网技术的集合。PKIs是PKI将S放入HTTPS中，如果你在Web浏览器上阅读此文档，你可能会使用PKI来确保它来自一个经过验证的源。
+
 ![](images/identity.diagram.7.png)
-The elements of Public Key Infrastructure (PKI). A PKI is comprised of Certificate Authorities who issue digital certificates to parties (e.g., users of a service, service provider), who then use them to authenticate themselves in the messages they exchange with their environment. A CA’s Certificate Revocation List (CRL) constitutes a reference for the certificates that are no longer valid. Revocation of a certificate can happen for a number of reasons. For example, a certificate may be revoked because the cryptographic private material associated to the certificate has been exposed.
 
-Although a blockchain network is more than a communications network, it relies on the PKI standard to ensure secure communication between various network participants, and to ensure that messages posted on the blockchain are properly authenticated. It’s therefore important to understand the basics of PKI and then why MSPs are so important.
+公钥基础设施（PKI）的要素。PKI由认证中心组成，它们向当事人发出数字证书（例如，服务使用者、服务提供者），然后使用它们在与环境交换的消息中对自己进行认证。CA证书吊销列表（CRL）构成证书不再有效的依据。很多原因会导致证书的撤销操作。例如，与证书相关联的加密私有材料已经被暴露。
 
-There are four key elements to PKI:
+区块链网络不仅仅是一个通信网络，它依赖于PKI标准来确保各种网络参与者之间的安全通信，并确保发布在区块链上的消息被正确地认证。因此，了解PKI的基础知识以及了解MSPs为什么如此重要是非常重要的。
 
-+ Digital Certificates
-+ Public and Private Keys
-+ Certificate Authorities
-+ Certificate Revocation Lists
+这里是PKI的四个关键要素：
 
-Let’s quickly describe these PKI basics, and if you want to know more details, Wikipedia is a good place to start.
-#####Digital Certificates#####
-A digital certificate is a document which holds a set of attributes relating to the holder of the certificate. The most common type of certificate is the one compliant with the X.509 standard, which allows the encoding of a party’s identifying details in its structure.
++ 数字证书
++ 公钥和私钥
++ 认证中心
++ 认证撤回列表
 
-For example, Mary Morris in the Manufacturing Division of Mitchell Cars in Detroit, Michigan might have a digital certificate with a SUBJECT attribute of C=US, ST=Michigan, L=Detroit, O=Mitchell Cars, OU=Manufacturing, CN=Mary Morris /UID=123456. Mary’s certificate is similar to her government identity card — it provides information about Mary which she can use to prove key facts about her. There are many other attributes in an X.509 certificate, but let’s concentrate on just these for now.
+让我们快速地过一下这些PKI基础知识，如果你想知道更多的细节，维基百科是一个很好的地方。
+#####数字证书#####
+数字证书是包含与证书持有者相关的一组属性的文档。最常见的证书类型是符合X.509标准的证书，它允许在其结构中对一方的身份细节进行编码。
+
+例如，在密歇根底特律的米切尔汽车制造部门的Mary Morris可能有一个具有C＝US、ST＝密歇根、L＝底特律、O＝米切尔汽车、OU=制造、CN＝Mary Morris /UID＝123456的数字属性的数字证书。玛丽的证书与她的政府身份证相似，它为Mary提供了可以用来证明相关身份的关键事实信息。X.509证书中还有很多其他属性，但现在我们只关注这些即可。
+
 ![](images/identity.diagram.8.png)
-A digital certificate describing a party called Mary Morris. Mary is the SUBJECT of the certificate, and the highlighted SUBJECT text shows key facts about Mary. The certificate also holds many more pieces of information, as you can see. Most importantly, Mary’s public key is distributed within her certificate, whereas her private signing key is not. This signing key must be kept private.
 
-What is important is that all of Mary’s attributes can be recorded using a mathematical technique called cryptography (literally, “secret writing”) so that tampering will invalidate the certificate. Cryptography allows Mary to present her certificate to others to prove her identity so long as the other party trusts the certificate issuer, known as a Certificate Authority (CA). As long as the CA keeps certain cryptographic information securely (meaning, its own private signing key), anyone reading the certificate can be sure that the information about Mary has not been tampered with — it will always have those particular attributes for Mary Morris. Think of Mary’s X.509 certificate as a digital identity card that is impossible to change.
-#####Authentication,Public keys,and Private Keys#####
-Authentication and message integrity are important concepts in secure communications. Authentication requires that parties who exchange messages are assured of the identity that created a specific message. For a message to have “integrity” means that cannot have been modified during its transmission. For example, you might want to be sure you’re communicating with the real Mary Morris rather than an impersonator. Or if Mary has sent you a message, you might want to be sure that it hasn’t been tampered with by anyone else during transmission.
+数字证书描述Mary Morris的相关信息。玛丽是证书的主题，高亮的主题文本显示了关于玛丽的关键事实。如你所见，该证书还保存了很多其他的信息。最重要的是，玛丽的公钥是在她的证书中分发的，而她的私有签名密钥不是。这个签名密钥必须保密。
 
-Traditional authentication mechanisms rely on digital signatures that, as the name suggests, allow a party to digitally sign its messages. Digital signatures also provide guarantees on the integrity of the signed message.
+重要的是，玛丽的所有属性可以用一种叫做密码学的数学技术（字面上的“secret writing”）来记录，这样篡改会使证书失效。密码学允许玛丽向他人证明她的身份，只要另一方信任证书颁发者，即证书颁发机构（CA）。只要CA安全地保存某些密码信息（意思是它私钥的隐私性），任何读取证书的人都可以确信玛丽的信息没有被篡改——它总是具有Mary Morris的那些特定属性。把玛丽的X.509证书看作是不可能改变的数字证书。
+#####认证，公钥和私钥#####
+认证和消息完整性是安全通信中的重要概念。身份验证要求交换消息的各方保证创建特定消息的身份。对于具有“完整性”的消息，意味着在传输过程中不能修改。例如，您可能希望确保与真实的Mary Morris通信，而不是冒充者。或者，如果玛丽给你发了一条消息，你可能想确保它在传输过程中没有被其他人篡改。
 
-Technically speaking, digital signature mechanisms require each party to hold two cryptographically connected keys: a public key that is made widely available and acts as authentication anchor, and a private key that is used to produce digital signatures on messages. Recipients of digitally signed messages can verify the origin and integrity of a received message by checking that the attached signature is valid under the public key of the expected sender.
+传统的认证机制依赖于数字签名，顾名思义，它允许一方对其消息进行数字签名。数字签名还提供了签名消息完整性的保证。
 
-The unique relationship between a private key and the respective public key is the cryptographic magic that makes secure communications possible. The unique mathematical relationship between the keys is such that the private key can be used to produce a signature on a message that only the corresponding public key can match, and only on the same message.
+从技术上讲，数字签名机制要求每一方持有两个密码连接的密钥：一个广泛可用的公钥，充当认证锚，以及用于在消息上产生数字签名的私钥。数字签名消息的接收者可以通过检查所附签名在预期发送者的公钥下有效，来验证接收到的消息的来源和完整性。
+
+私钥和相应公钥之间的唯一关系是使安全通信成为可能的密码魔术。密钥之间的唯一的数学关系使得私钥可以用于在仅对应的公钥可以匹配的消息上产生签名，并且仅在同一消息上产生签名。
+
 ![](images/identity.diagram.9.png)
-In the example above, Mary uses her private key to sign the message. The signature can be verified by anyone who sees the signed message using her public key.
-#####Certificate Authorities#####
-As you’ve seen, an actor or a node is able to participate in the blockchain network, via the means of a digital identity issued for it by an authority trusted by the system. In the most common case, digital identities (or simply identities) have the form of cryptographically validated digital certificates that comply with X.509 standard and are issued by a Certificate Authority (CA).
 
-CAs are a common part of internet security protocols, and you’ve probably heard of some of the more popular ones: Symantec (originally Verisign), GeoTrust, DigiCert, GoDaddy, and Comodo, among others.
+在上述示例中，Mary使用她的私钥来签名消息。使用Mary公钥的任何人都可以验证该签名。
+#####认证中心#####
+如你所见，一个参与者或一个节点能够通过一个由系统信任的权威发布的数字身份来参与区块链网络。在最常见的情况下，数字身份（或简单身份）具有符合X.509标准并由证书颁发机构（CA）颁发的经密码验证的数字证书的形式。
+
+CAs是Internet安全协议的一个常见部分，您可能已经听说过一些很流行的协议：Symantec（最初VISISIN）、GeoTrust、DigiCert、GoDaddy和Comodo等等。
+
 ![](images/identity.diagram.11.png)
-A Certificate Authority dispenses certificates to different actors. These certificates are digitally signed by the CA and bind together the actor with the actor’s public key (and optionally with a comprehensive list of properties). As a result, if one trusts the CA (and knows its public key), it can trust that the specific actor is bound to the public key included in the certificate, and owns the included attributes, by validating the CA’s signature on the actor’s certificate.
 
-Certificates can be widely disseminated, as they do not include either the actors’ nor the CA’s private keys. As such they can be used as anchor of trusts for authenticating messages coming from different actors.
+证书颁发机构将证书分发给不同的参与者。这些证书由CA进行数字签名，并将参与者与参与者的公钥绑定在一起（并且可选地绑定属性的综合列表）绑定。因此，如果信任CA（并且知道它的公钥），它可以信任特定的参与者绑定到证书中包含的公钥，并通过验证在参与者证书上的CA签名来获取所包含的属性。
 
-CAs also have a certificate, which they make widely available. This allows the consumers of identities issued by a given CA to verify them by checking that the certificate could only have been generated by the holder of the corresponding private key (the CA).
+证书可以广泛传播，因为它们既不包括参与者的私钥也不包括CA的私钥。因此，它们可以用作信任来自不同参与者的消息的信任锚。
 
-In a blockchain setting, every actor who wishes to interact with the network needs an identity. In this setting, you might say that one or more CAs can be used to define the members of an organization’s from a digital perspective. It’s the CA that provides the basis for an organization’s actors to have a verifiable digital identity.
+CAs也有证书，这使得他们广泛使用。这允许由给定CA颁发的身份验证的消费者通过检查证书只能由相应私钥持有者（CA）生成。
+
+在区块链设置中，希望与网络交互的每个参与者都需要身份。在这个设置中，您可能会说，一个或多个CAs可以用来从数字的角度定义组织的成员。正是CA为一个组织的参与者提供了一个可验证的数字身份的基础。
 ######Root CAs,Intermediate CAs and Chains of Trust######
-CAs come in two flavors: Root CAs and Intermediate CAs. Because Root CAs (Symantec, Geotrust, etc) have to securely distribute hundreds of millions of certificates to internet users, it makes sense to spread this process out across what are called Intermediate CAs. These Intermediate CAs have their certificates issued by the root CA or another intermediate authority, allowing the establishment of a “chain of trust” for any certificate that is issued by any CA in the chain. This ability to track back to the Root CA not only allows the function of CAs to scale while still providing security — allowing organizations that consume certificates to use Intermediate CAs with confidence — it limits the exposure of the Root CA, which, if compromised, would endanger the entire chain of trust. If an Intermediate CA is compromised, on the other hand, there will be a much smaller exposure.
+CAs有两种口味: Root CAs和Intermediate CAs。因为Root CAs（Symantec，Geotrust等）必须安全地向互联网用户分发数以亿计的证书，所以将这个过程推广到所谓的中间CAs是有意义的。这些中间的CAs有Root CA或其他中间机构颁发的证书，允许建立由链中的任何CA颁发的任何证书的“信任链”。这种追踪根CA的能力不仅允许CAS的功能扩展，同时还提供安全性——允许使用证书的组织有信心地使用中间CAs——它限制了Root CA的暴露，如果Root CA被破坏将危及整个信任链。如果中间CA被破坏，则破坏性相对较小。
+
 ![](images/identity.diagram.1.png)
-A chain of trust is established between a Root CA and a set of Intermediate CAs as long as the issuing CA for the certificate of each of these Intermediate CAs is either the Root CA itself or has a chain of trust to the Root CA.
 
-Intermediate CAs provide a huge amount of flexibility when it comes to the issuance of certificates across multiple organizations, and that’s very helpful in a permissioned blockchain system (like Fabric). For example, you’ll see that different organizations may use different Root CAs, or the same Root CA with different Intermediate CAs — it really does depend on the needs of the network.
+信任链是建立在Root CA和一组中间CAs之间的，只要这些中间CAs的证书的颁发CA是Root CA本身或是与Root CA有信任链关系的CA即可。
+
+中间CAs在跨多个组织颁发证书时提供了极大的灵活性，这在一个权限区块链系统（比如Fabric）中十分有用。例如，您将看到不同的组织可以使用不同的Root CAs，或者使用相同的Root CA但具有不同的中间CAs——这取决于不同的网络需求。
 ######Fabric CA######
-It’s because CAs are so important that Fabric provides a built-in CA component to allow you to create CAs in the blockchain networks you form. This component — known as Fabric CA is a private root CA provider capable of managing digital identities of Fabric participants that have the form of X.509 certificates. Because Fabric CA is a custom CA targeting the Root CA needs of Fabric, it is inherently not capable of providing SSL certificates for general/automatic use in browsers. However, because some CA must be used to manage identity (even in a test environment), Fabric CA can be used to provide and manage certificates. It is also possible — and fully appropriate — to use a public/commerical root or intermediate CA to provide identification.
+因为CAs非常重要，所以Faby提供了一个内置的CA组件来允许你在区块链网络中创建CAs。这个称为Fabric CA的组件是一个私有Root CA提供者，能够管理具有X.509证书形式的Fabric参与者的数字身份。由于Fabruc CA是针对Root CA需要定制的CA，所以它本质上不能够在浏览器中提供SSL证书以用于一般/自动使用。但是，由于某些CA必须用于管理身份（即使在测试环境中），所以可以使用Fabric CA来提供和管理证书。使用公共/商业Root或中间CA来提供身份证明也是可能的，而且也是完全合适的。
 
-If you’re interested, you can read a lot more about Fabric CA in the CA documentation section.
-#####Certificate Revocation Lists#####
-A Certificate Revocation List (CRL) is easy to understand — it’s just a list of references to certificates that a CA knows to be revoked for one reason or another. If you recall the store scenario, a CRL would be like a list of stolen credit cards.
+如果你感兴趣，你可以在CA文档中获得大量信息。
+#####证书撤销列表#####
+证书撤销列表（CRL）很容易理解--它就是一个认证中心已知的撤销证书的列表。映射到商店的场景中，证书撤销列表就是被偷信用卡的统计列表。
 
-When a third party wants to verify another party’s identity, it first checks the issuing CA’s CRL to make sure that the certificate has not been revoked. A verifier doesn’t have to check the CRL, but if they don’t they run the risk of accepting a compromised identity.
+当一个第三方想验证另一方的身份时，首先会去CRL检查该证书是否被撤销。作为校验方，也不是必须去检查CRL，但是如果不检查，他们就无法避免该风险。
+
 ![](images/identity.diagram.12.png)
-Using a CRL to check that a certificate is still valid. If an impersonator tries to pass a compromised digital certificate to a validating party, it can be first checked against the issuing CA’s CRL to make sure it’s not listed as no longer valid.
 
-Note that a certificate being revoked is very different from a certificate expiring. Revoked certificates have not expired — they are, by every other measure, a fully valid certificate. For more in-depth information about CRLs, click here.
+使用CRL来检查某个证书是否还有效。如果冒名顶替者试图将受损的数字证书传递给验证方，则可以首先针对CA发布的CRL进行检查，以确保其未被列为不再有效。
 
-Now that you’ve seen how a PKI can provide verifiable identities through a chain of trust, the next step is to see how these identities can be used to represent the trusted members of a blockchain network. That’s where a Membership Service Provider (MSP) comes into play — it identifies the parties who are the members of a given organization in the blockchain network.
+需要注意，一个证书被撤销与一个证书过期有很大的差别。被撤销的证书没有过期，他们是完全有效的证书。更多关于CRLs的进一步信息，点击这里（https://hyperledger-fabric-ca.readthedocs.io/en/latest/users-guide.html#generating-a-crl-certificate-revocation-list）。
 
-To learn more about membership, check out the conceptual documentation on MSPs.
+现在，您已经看到PKI如何通过信任链提供可验证的身份，下一步是看这些身份如何被用来表示区块链网络的可信成员。这就是会员服务提供商（MSP）发挥作用的地方——它标识了区块链网络中给定组织成员的参与者。
 ####Membership####
-If you’ve read through the documentation on identity you’ve seen how a PKI can provide verifiable identities through a chain of trust. Now let’s see how these identities can be used to represent the trusted members of a blockchain network.
+如果你已经读过了前面的文档，你就已经了解了PKI如何通过信任链提供可验证的身份。现在让我们看看这些身份如何被用来表示区块链网络的可信成员。
 
-This is where a Membership Service Provider (MSP) comes into play — it identifies which Root CAs and Intermediate CAs are trusted to define the members of a trust domain, e.g., an organization, either by listing the identities of their members, or by identifying which CAs are authorized to issue valid identities for their members, or — as will usually be the case — through a combination of both.
+这就是会员服务提供商（MSP）发挥作用的地方--它标识哪些根CAs和中间CAs被信任来定义信任域的成员，例如一个组织，既可以通过列出成员的身份，也可以通过识别哪些CAS被授权发布有效的身份作为他们的成员，或-通常情况下-通过两者的结合。
 
-The power of an MSP goes beyond simply listing who is a network participant or member of a channel. An MSP can identify specific roles an actor might play either within the scope of the organization the MSP represents (e.g., admins, or as members of a sub-organization group), and sets the basis for defining access privileges in the context of a network and channel (e.g., channel admins, readers, writers).
+MSP的作用远超于简单列出谁是网络参与者或者channel的成员。一个MSP可以识别一个参与者可能在MSP所代表的组织范围内扮演的特定角色（例如，管理员，或者作为子组织组的成员），并为在网络和channel的上下文中定义基础访问特权（例如，channel管理员、readers、writers）。
 
-The configuration of an MSP is advertised to all the channels where members of the corresponding organization participate (in the form of a channel MSP). In addition to the channel MSP, peers, orderers, and clients also maintain a local MSP to authenticate member messages outside the context of a channel and to define the permissions over a particular component (who has the ability to install chaincode on a peer, for example).
+MSP的配置信息会通告给相应组织成员参与的所有信道（以channel MSP的形式）。除了channel MSP之外，peers、orderers和clients还维护本地MSP来认证channel上下文之外的成员消息，并定义特定组件（例如，谁能够在对等点上安装链码的能力）的权限。
 
-In addition, an MSP can allow for the identification of a list of identities that have been revoked — as discussed in the Identity documentation — but we will talk about how that process also extends to an MSP.
+此外，MSP可以允许标识已被撤销的身份列表——如前面所讨论的，但我们将讨论该处理是如何扩展到MSP。
 
-We’ll talk more about local and channel MSPs in a moment. For now let’s see what MSPs do in general.
-#####Mapping MSPs to Organizations#####
-An organization is a managed group of members. This can be something as big as a multinational corporation or a small as a flower shop. What’s most important about organizations (or orgs) is that they manage their members under a single MSP. Note that this is different from the organization concept defined in an X.509 certificate, which we’ll talk about later.
+我们很快就会讨论local和channel MSPs。现在，让简单看看MSPs的功能。
+#####映射MSPs到组织#####
+组织是一个管理的成员群体。这可以像跨国公司一样大，或者像花店一样小。组织最重要的概念是：他们在单个MSP下管理他们的成员。请注意，这与X.509证书中定义的组织概念不同，我们稍后将对此进行讨论。
 
-The exclusive relationship between an organization and its MSP makes it sensible to name the MSP after the organization, a convention you’ll find adopted in most policy configurations. For example, organization ORG1 would likely have an MSP called something like ORG1-MSP. In some cases an organization may require multiple membership groups — for example, where channels are used to perform very different business functions between organizations. In these cases it makes sense to have multiple MSPs and name them accordingly, e.g., ORG2-MSP-NATIONAL and ORG2-MSP-GOVERNMENT, reflecting the different membership roots of trust within ORG2 in the NATIONAL sales channel compared to the GOVERNMENT regulatory channel.
+组织和它的MSP之间的排他性关系使得在定义组织之后再定义MSP是明智的，在大多数策略配置中都是这种约定。例如，组织ORG1可能会有一个称为ORG1-MSP的MSP。在某些情况下，组织可能需要多个成员组——例如，channel用于在组织之间执行非常不同的业务功能时。在这些情况下，有多个MSP并相应地命名它们是有意义的，例如ORG2-MSP-NATIONAL和ORG2-MSP-GOVERNMENT，反映了不同的成员信任root。
+
 ![](images/membership.diagram.3.png)
-Two different MSP configurations for an organization. The first configuration shows the typical relationship between an MSP and an organization — a single MSP defines the list of members of an organization. In the second configuration, different MSPs are used to represent different organizational groups with national, international, and governmental affiliation.
-######Organizational Units and MSPs######
-An organization is often divided up into multiple organizational units (OUs), each of which has a certain set of responsibilities. For example, the ORG1 organization might have both ORG1-MANUFACTURING and ORG1-DISTRIBUTION OUs to reflect these separate lines of business. When a CA issues X.509 certificates, the OU field in the certificate specifies the line of business to which the identity belongs.
 
-We’ll see later how OUs can be helpful to control the parts of an organization who are considered to be the members of a blockchain network. For example, only identities from the ORG1-MANUFACTURING OU might be able to access a channel, whereas ORG1-DISTRIBUTION cannot.
+一个组织的两种不同的MSP配置。第一种配置展示了MSP和组织之间最典型的关系--单个MSP定义了组织的成员列表。在第二种配置中，不同的MSPs被用来表示不同的组织群组，比如national、international和government。
+######Organizational Units和MSPs######
+一个组织通常被切分为多个组织单元（organizational units，OUs），每个组织单元都有特定的职责。例如，ORG1组织可能有ORG1-MANUFACTURING和ORG1-DISTRIBUTION OUs来反映这些单独的业务线。当CA颁发X.509证书时，证书中的OU字段指定身份所属的业务线。
 
-Finally, though this is a slight misuse of OUs, they can sometimes be used by different organizations in a consortium to distinguish each other. In such cases, the different organizations use the same Root CAs and Intermediate CAs for their chain of trust, but assign the OU field to identify members of each organization. We’ll also see how to configure MSPs to achieve this later.
+稍后我们将了解OUs是如何帮助控制组织的各个部分的（即区块链网络的成员）。例如，只有来自OG1-MANUFACTURING OU的身份可能能够访问某个channel，而ORG1-DISTRIBUTION不能。
+
+最后，虽然这是对OUs的轻微滥用，在财团中可以使用不同的组织来区分彼此。在这种情况下，不同的组织使用相同的Root CAs和中间CAs来建立信任链，但是分配OU字段来标识每个组织的成员。我们后面会看到如何配置MSPS来实现这一点。
 #####Local and Channel MSPs#####
-MSPs appear in two places in a blockchain network: channel configuration (channel MSPs), and locally on an actor’s premise (local MSP). Local MSPs are defined for clients (users) and for nodes (peers and orderers). Node local MSPs define the permissions for that node (who the peer admins are, for example). The local MSPs of the users allow the user side to authenticate itself in its transactions as a member of a channel (e.g. in chaincode transactions), or as the owner of a specific role into the system (an org admin, for example, in configuration transactions).
+MSPs出现在区块链网络的两个地方：channel配置中（channel MSPs）和参与者的本地契约中（local MSP）。Local MSPs是为client（users)和nodes（peers和orderers）定义的。Node local MSPs定义了该node的许可（例如，谁是peer管理员）。Users的local MSPs允许用户侧在其交易中作为channel成员（例如在一个chaincode交易中）进行身份验证，或者作为特定角色的所有者进入系统（例如，在配置交易中作为ORG管理员）。
 
-Every node and user must have a local MSP defined, as it defines who has administrative or participatory rights at that level (peer admins will not necessarily be channel admins, and vice versa).
+每一个node和user都必须拥有一个local MSP定义，因为它定义了谁在该级别具有管理或参与权限（peer管理员不一定是channel管理员，反之亦然）。
 
-In contrast, channel MSPs define administrative and participatory rights at the channel level. Every organization participating in a channel must have an MSP defined for it. Peers and orderers on a channel will all share the same view of channel MSPs, and will therefore be able to correctly authenticate the channel participants. This means that if an organization wishes to join the channel, an MSP incorporating the chain of trust for the organization’s members would need to be included in the channel configuration. Otherwise transactions originating from this organization’s identities will be rejected.
+相比之下，channel MSP在channel级别定义管理和参与权利。参与channel的每个组织都必须为它定义一个MSP。Channel上的peers和orderers都将共享相同的channel MSPs的视图，因此将能够正确地验证channel参与者。这意味着，如果组织希望加入该channel，则需要将包含该组织成员的信任链的MSP包含在channel配置中。否则，来自该组织的身份的交易将被拒绝。
 
-The key difference here between local and channel MSPs is not how they function — both turn identities into roles — but their scope.
+Local MSP和channel MSP之间的关键区别不是它们如何工作--两者都是讲身份转换为角色——而是它们的作用域。
+
 ![](images/membership.diagram.4.png)
-Local and channel MSPs. The trust domain (e.g., the organization) of each peer is defined by the peer’s local MSP, e.g., ORG1 or ORG2. Representation of an organization on a channel is achieved by adding the organization’s MSP to the channel configuration. For example, the channel of this figure is managed by both ORG1 and ORG2. Similar principles apply for the network, orderers, and users, but these are not shown here for simplicity.
 
-You may find it helpful to see how local and channel MSPs are used by seeing what happens when a blockchain administrator installs and instantiates a smart contract, as shown in the diagram above.
+Local和channel MSPs。每个peer的信任domain（例如，组织）是被peer的local MSP所定义的，例如，ORG1或ORG2。一个组织添加到一个channel是通过将组织的MSP添加到该channel的配置中来实现的。例如，上图的channel由ORG1和ORG2两者管理。类似的原则适用于网络、orderers和users，但为了简单起见，这里没有展示这些。
 
-An administrator B connects to the peer with an identity issued by RCA1 and stored in their local MSP. When B tries to install a smart contract on the peer, the peer checks its local MSP, ORG1-MSP, to verify that the identity of B is indeed a member of ORG1. A successful verification will allow the install command to complete successfully. Subsequently, B wishes to instantiate the smart contract on the channel. Because this is a channel operation, all organizations on the channel must agree to it. Therefore, the peer must check the MSPs of the channel before it can successfully commit this command. (Other things must happen too, but concentrate on the above for now.)
+如上图所示，通过观察当区块链管理员安装和实例化智能合约时发生了什么，有助于理解local和channel MSP是如何使用的。
 
-Local MSPs are only defined on the file system of the node or user to which they apply. Therefore, physically and logically there is only one local MSP per node or user. However, as channel MSPs are available to all nodes in the channel, they are logically defined once in the channel configuration. However, a channel MSP is also instantiated on the file system of every node in the channel and kept synchronized via consensus. So while there is a copy of each channel MSP on the local file system of every node, logically a channel MSP resides on and is maintained by the channel or the network.
+管理员B以RCA1发布的身份连接到peer并存储在他们的local MSP中。当B试图在peer上安装智能合约时，peer检查其local MSP，OGR1-MSP，以验证B的身份确实是ORG1的成员。成功的验证将允许安装命令成功完成。随后，B希望在channel上实例化智能合约。因为这是一个channel操作，channel上的所有组织都必须同意。因此，peer必须在成功提交此命令之前检查channel的MSPs。（还有其他操作会发生，但是我们暂且只关注上述操作。）
+
+Local MSPs只定义在它们所应用的node或user的文件系统上。因此，在物理和逻辑上，每个node或user只有一个local MSP。然而，当channel MSP对channel中的所有nodes可用时，它们在channel配置中被逻辑地定义一次。然而，channel MSP也在channel中每个node的文件系统中被实例化，并通过协商保持同步。因此，尽管每个node的本地文件系统上都有每个channel MSP的副本，但逻辑上，channel MSP驻留在channel或网络上。 
 #####MSP Levels#####
-The split between channel and local MSPs reflects the needs of organizations to administer their local resources, such as a peer or orderer nodes, and their channel resources, such as ledgers, smart contracts, and consortia, which operate at the channel or network level. It’s helpful to think of these MSPs as being at different levels, with MSPs at a higher level relating to network administration concerns while MSPs at a lower level handle identity for the administration of private resources. MSPs are mandatory at every level of administration — they must be defined for the network, channel, peer, orderer, and users.
+Channel和local MSPs之间的划分反映了组织管理本地资源的需求，例如一个peer或orderer node，以及它们的channel资源，例如在channel或网络级别工作的账本、智能合约和财团。将这些MSP视为不同的级别是有帮助的，更高层次上的MSP涉及到网络管理，而在较低级别的MSP处理私人资源管理的身份。MSPs在每一级管理中都是强制性的，它们必须为网络、channel、peer、orderer和users定义。
+
 ![](images/membership.diagram.2.png)
-MSP Levels. The MSPs for the peer and orderer are local, whereas the MSPs for a channel (including the network configuration channel) are shared across all participants of that channel. In this figure, the network configuration channel is administered by ORG1, but another application channel can be managed by ORG1 and ORG2. The peer is a member of and managed by ORG2, whereas ORG1 manages the orderer of the figure. ORG1 trusts identities from RCA1, whereas ORG2 trusts identities from RCA2. Note that these are administration identities, reflecting who can administer these components. So while ORG1 administers the network, ORG2.MSP does exist in the network definition.
 
-+ Network MSP: The configuration of a network defines who are the members in the network — by defining the MSPs of the participant organizations — as well as which of these members are authorized to perform administrative tasks (e.g., creating a channel).
-+ Channel MSP: It is important for a channel to maintain the MSPs of its members separately. A channel provides private communications between a particular set of organizations which in turn have administrative control over it. Channel policies interpreted in the context of that channel’s MSPs define who has ability to participate in certain action on the channel, e.g., adding organizations, or instantiating chaincodes. Note that there is no necessary relationship between the permission to administrate a channel and the ability to administrate the network configuration channel (or any other channel). Administrative rights exist within the scope of what is being administrated (unless the rules have been written otherwise — see the discussion of the ROLE attribute below).
-+ Peer MSP: This local MSP is defined on the file system of each peer and there is a single MSP instance for each peer. Conceptually, it performs exactly the same function as channel MSPs with the restriction that it only applies to the peer where it is defined. An example of an action whose authorization is evaluated using the peer’s local MSP is the installation of a chaincode on the peer.
-+ Orderer MSP: Like a peer MSP, an orderer local MSP is also defined on the file system of the node and only applies to that node. Like peer nodes, orderers are also owned by a single organization and therefore have a single MSP to list the actors or nodes it trusts.
+MSP级别。Peer和orderer的MSPs是local的，而channel（包括网络配置channel）的MSP在该channel的所有参与者之间共享。在这个图中，网络配置channel由ORG1管理，但是另一个应用channel可以由ORG1和ORG2管理。Peer是ORG2的成员，由ORG2管理，而ORG1管理图形的orderer。ORG1信任来自RCA1的身份，而ORG2信任来自RCA2的身份。请注意，这些是管理身份，反映谁可以管理这些组件。因此，当ORG1管理网络时，Org2.MSP确实存在于网络定义中。
+
++ **Network MSP**: 网络的配置定义了谁是该网络中的成员--通过定义参与者组织的MSP--以及这些成员中的哪些成员被授权执行管理任务（例如，创建channel）。
++ **Channel MSP**: 对于一个channel来说，分别维护其成员的MSP是重要的。Channel在特定的一组组织之间提供私人通信，而这些组织又具有对其的管理控制。在该channel的MSP上下文中解释的channel策略定义了谁有能力参与信道上的某些动作，例如，添加组织或实例化chaincodes。注意，管理channel的权限与管理网络配置channel（或任何其他channel）的能力之间没有必然的关系。行政权存在于被管理的范围内（除非规则被写入否则参见下面的角色属性的讨论）。
++ **Peer MSP**: 该local MSP定义在每一个peer的文件系统上并且每一个peer只有一个MSP实例。从概念上讲，它执行与channel MSPs完全相同的功能，其限制仅适用于定义它的peer。使用peer的local MSP来评估授权的动作的一个示例是在peer上安装chaincode。
++ **Orderer MSP**: 类似于一个peer MSP，一个orderer local MSP也是定义在node的文件系统上并且只适用于该node。类似于peer nodes，orderers也只被单个组织所拥有，因此它有一个单独的MSP来列出信任的参与者或nodes。
 #####Msp Structure#####
-So far, you’ve seen that the most important element of an MSP are the specification of the root or intermediate CAs that are used to establish an actor’s or node’s membership in the respective organization. There are, however, more elements that are used in conjunction with these two to assist with membership functions.
+到目前为止，您已经看到MSP中最重要的元素是Root或中间CAs的规范，它们用于在各自的组织中建立一个参与者或节点的成员关系。然而，有更多的元素与这两个元素一起使用来辅助会员功能。
+
 ![](images/membership.diagram.5.png)
-The figure above shows how a local MSP is stored on a local filesystem. Even though channel MSPs are not physically structured in exactly this way, it’s still a helpful way to think about them.
 
-As you can see, there are nine elements to an MSP. It’s easiest to think of these elements in a directory structure, where the MSP name is the root folder name with each subfolder representing different elements of an MSP configuration.
+上述图表展示了如何在一个本地文件系统中存储一个local MSP。虽然channel MSPs在物理上不是严格以这种方式构建的，但是这样来思考也是一种很有帮助的方式。
 
-Let’s describe these folders in a little more detail and see why they are important.
+如你所见，一个MSP有9个元素。将这些元素对应到一个目录结构来理解是最简单的，MSP的名称是root文件夹，每一个子文件夹代表MSP配置中的不同元素。
 
-+ Root CAs: This folder contains a list of self-signed X.509 certificates of the Root CAs trusted by the organization represented by this MSP. There must be at least one Root CA X.509 certificate in this MSP folder.
-<p>
-This is the most important folder because it identifies the CAs from which all other certificates must be derived to be considered members of the corresponding organization.
-+ Intermediate CAs: This folder contains a list of X.509 certificates of the Intermediate CAs trusted by this organization. Each certificate must be signed by one of the Root CAs in the MSP or by an Intermediate CA whose issuing CA chain ultimately leads back to a trusted Root CA.
-<p>
-An intermediate CA may represent a different subdivision of the organization (like ORG1-MANUFACTURING and ORG1-DISTRIBUTION do for ORG1), or the organization itself (as may be the case if a commercial CA is leveraged for the organization’s identity management). In the latter case intermediate CAs can be used to represent organization subdivisions. Here you may find more information on best practices for MSP configuration. Notice, that it is possible to have a functioning network that does not have an Intermediate CA, in which case this folder would be empty.
-<p>
-Like the Root CA folder, this folder defines the CAs from which certificates must be issued to be considered members of the organization.
-+ Organizational Units (OUs): These are listed in the $FABRIC_CFG_PATH/msp/config.yaml file and contain a list of organizational units, whose members are considered to be part of the organization represented by this MSP. This is particularly useful when you want to restrict the members of an organization to the ones holding an identity (signed by one of MSP designated CAs) with a specific OU in it.
-<p>
-Specifying OUs is optional. If no OUs are listed, all the identities that are part of an MSP — as identified by the Root CA and Intermediate CA folders — will be considered members of the organization.
-+ Administrators: This folder contains a list of identities that define the actors who have the role of administrators for this organization. For the standard MSP type, there should be one or more X.509 certificates in this list.
-<p>
-It’s worth noting that just because a actor has the role of an administrator it doesn’t mean that they can administer particular resources! The actual power a given identity has with respect to administering the system is determined by the policies that manage system resources. For example, a channel policy might specify that ORG1-MANUFACTURING administrators have the rights to add new organizations to the channel, whereas the ORG1-DISTRIBUTION administrators have no such rights.
-<p>
-Even though an X.509 certificate has a ROLE attribute (specifying, for example, that a actor is an admin), this refers to a actor’s role within its organization rather than on the blockchain network. This is similar to the purpose of the OU attribute, which — if it has been defined — refers to a actor’s place in the organization.
-<p>
-The ROLE attribute can be used to confer administrative rights at the channel level if the policy for that channel has been written to allow any administrator from an organization (or certain organizations) permission to perform certain channel functions (such as instantiating chaincode). In this way, an organizational role can confer a network role.
-+ Revoked Certificates: If the identity of an actor has been revoked, identifying information about the identity — not the identity itself — is held in this folder. For X.509-based identities, these identifiers are pairs of strings known as Subject Key Identifier (SKI) and Authority Access Identifier (AKI), and are checked whenever the X.509 certificate is being used to make sure the certificate has not been revoked.
-<p>
-This list is conceptually the same as a CA’s Certificate Revocation List (CRL), but it also relates to revocation of membership from the organization. As a result, the administrator of an MSP, local or channel, can quickly revoke a actor or node from an organization by advertising the updated CRL of the CA the revoked certificate as issued by. This “list of lists” is optional. It will only become populated as certificates are revoked.
-+ Node Identity: This folder contains the identity of the node, i.e., cryptographic material that — in combination to the content of KeyStore — would allow the node to authenticate itself in the messages that is sends to other participants of its channels and network. For X.509 based identities, this folder contains an X.509 certificate. This is the certificate a peer places in a transaction proposal response, for example, to indicate that the peer has endorsed it — which can subsequently be checked against the resulting transaction’s endorsement policy at validation time.
-<p>
-This folder is mandatory for local MSPs, and there must be exactly one X.509 certificate for the node. It is not used for channel MSPs.
-+ KeyStore for Private Key: This folder is defined for the local MSP of a peer or orderer node (or in an client’s local MSP), and contains the node’s signing key. This key matches cryptographically the node’s identity included in Node Identity folder and is used to sign data — for example to sign a transaction proposal response, as part of the endorsement phase.
-<p>
-This folder is mandatory for local MSPs, and must contain exactly one private key. Obviously, access to this folder must be limited only to the identities of users who have administrative responsibility on the peer.
-<p>
-Configuration of a channel MSPs does not include this folder, as channel MSPs solely aim to offer identity validation functionalities and not signing abilities.
-+ TLS Root CA: This folder contains a list of self-signed X.509 certificates of the Root CAs trusted by this organization for TLS communications. An example of a TLS communication would be when a peer needs to connect to an orderer so that it can receive ledger updates.
-<p>
-MSP TLS information relates to the nodes inside the network — the peers and the orderers, in other words, rather than the applications and administrations that consume the network.
-<p>
-There must be at least one TLS Root CA X.509 certificate in this folder.
-+ TLS Intermediate CA: This folder contains a list intermediate CA certificates CAs trusted by the organization represented by this MSP for TLS communications. This folder is specifically useful when commercial CAs are used for TLS certificates of an organization. Similar to membership intermediate CAs, specifying intermediate TLS CAs is optional.
-<p>
-For more information about TLS, click here.
+让我们进一步学习这些文件夹并理解他们为什么这么重要。
 
-If you’ve read this doc as well as our doc on Identity), you should have a pretty good grasp of how identities and membership work in Hyperledger Fabric. You’ve seen how a PKI and MSPs are used to identify the actors collaborating in a blockchain network. You’ve learned how certificates, public/private keys, and roots of trust work, in addition to how MSPs are physically and logically structured.
++ **Root CAs**: 该文件夹包含由此MSP中所有组织所信任的root CAs的自签名X.509证书的列表。在这个MSP文件夹中必须至少有一个root CA x.509证书。
+
+	这是最重要的文件夹，因为它标识了CAs。只有通过这些CAs，所有其他证书才能被衍生并被认为是相应组织的成员。
++ **Intermediate CAs**: 该文件夹包含了本组织所信任的中间CAs的X.509证书列表。每一个证书必须被MSP中的一个Root CAs或者中间CAs签名，因为中间CAs发行的CA链最终会指向信任的Root CA。
+
+	中间CA可以代表组织的不同细分（如ORG1的ORG1-MANUFACTURING和OGR1-DISTRIBUTION），或者组织本身（如果商业CA被用于组织的身份管理，情况可能是这样）。在后一种情况下，中间CAs可以用来表示组织细分。在这里，您可以找到更多关于MSP配置的最佳实践。请注意，可能存在一个没有中间CA的功能网络，在这种情况下，该文件夹将是空的。
+
+	类似于Root CA文件夹，该文件夹定义了用于发行认证组织成员证书的CAs。
++ **Organizational Units (OUs)**: 这些展示在$FABRIC_CFG_PATH/msp/config.yaml文件中，并且包含组织单元的列表，这些组织单元的成员被该MSP认定为组织的组成部分。当你希望将组织的成员限定为持有身份（由MSP指定的CAs中的一个签名）并具有特定OU信息的成员时，这尤其有用。 
+
+	指定OUs是可选的。如果没指定OUs，所有的身份都是MSP的组成部分--被Root CA和中间CA文件夹鉴定--并且被作为组织的成员。
++ **Administrators**: 该文件夹包含一个身份列表，身份列表定义了哪些参与者具有管理该组织的角色。按照标准的MSP，列表中应该有一个或多个X.509证书。
+
+	值得注意的是，仅仅因为一个演员有一个管理员的角色，这并不意味着他们可以管理特定的资源！给定的身份对于管理系统的实际权力由管理系统资源的策略决定。例如，一个channel策略可能指定OGR1-MANUFACTURING管理员有权向该channel添加新的组织，而OG1-DISTRIBUTION管理员没有这样的权限。
+
+	即使X.509证书具有一个角色属性（例如，指定一个参与者是一个管理员），但它指的是它在组织中的角色，而不是区块链网络。这与OU属性的目的类似，OU属性--如果它已被定义--指的是组织中的一个参与者的定位。
+
+	如果一个channel的策略已被写定，以允许来自组织（或特定组织）的任何管理员允许执行某些channel功能（例如实例化链码），则可以使用角色属性来授予channel级的管理权限。通过这种方式，组织角色可以赋予网络角色。
++ **Revoked Certificates**: 如果一个参与者的身份被撤销，该身份的识别信息--不是身份自身--被存放在此文件夹。对于基于X.509的身份，这些标识符是称为主题密钥标识符（SKI）和权限访问标识符（AKI）的字符串对，每当X.509证书被用于确保证书没有被撤销时，都会对其进行检查。
+
+	此列表在概念上与CA证书撤销列表（CRL）相同，但也涉及撤销组织的成员资格。因此，MSP、local或channel的管理员可以通过对CA的更新CRL进行广告，从而撤销来自组织的参与者或node。这个“list of lists”是可选的。它只会因为证书被撤销而存在。
++ **Node Identity**: 该文件夹包含node的身份，即，与密钥存储库的内容相结合的密码材料将允许节点在发送到其channel和网络的其他参与者的消息中进行身份验证。对于基于X.509的身份，此文件夹包含X.509证书。这是在交易发起响应中peer放置的证书，例如，指示peer已经认可它，随后可以在验证时期对所得到的交易的背书策略进行检查。
+
+	此文件夹对于local MSPs是必须的，并且node必须只有一个X.509证书。它不用于channel MSPs。
++ **KeyStore for Private Key**: 该文件夹是针对peer或orderer节点（或客户端的local MSP）的local MSP定义的，并包含节点的签名密钥。该密钥与节点标识文件夹中包含的节点的身份进行加密匹配，并用于签署数据--例如，签署交易发起响应--作为背书阶段的一部分。
+
+	此文件夹对于local MSP是必需的，并且必须包含一个私钥。显然，对该文件夹的访问必须仅限于对该peer具有管理权限的身份。
+
+	一个channel MSPs的配置不包含此文件夹，因为channel MSPs目的只在于提高身份校验功能，而不提供签名能力。
++ **TLS Root CA**: 该文件夹包含一个由本组织为TLS通信所信任的Root CAs的自签名X.509证书的列表。TLS通信的一个例子是当一个peer需要连接到一个orderer，以便它可以接收分类帐更新。
+
+	MSP TLS信息涉及网络内的节点-peers和orderers，换句话说，不是消费网络的应用和管理机制。
+
+	在该文件夹至少有一个TLS Root CA X.509证书。
++ **TLS Intermediate CA**: 该文件夹包含一个由本组织为TLS通信所信任的中间CAs列表。当商业CAs用于组织的TLS证书时，该文件夹特别有用。类似于成员中介CAS，指定中介TLS CAs是可选的。
+
+	关于TLS的更多详细信息，请点击这里。（http://hyperledger-fabric.readthedocs.io/en/release-1.1/enable_tls.html）
+
+如果你已经阅读了这个文档以及我们的身份文档，你应该很好地掌握身份和会员是如何在Hyperledger Fabric中工作的。您已经看到了如何使用PKI和MSPs来标识区块链网络中的参与者协作。除了了解了MSPs的物理和逻辑结构外，您还了解了证书、公钥/私钥和roots of trust work是如何工作的。
 ####Peers####
-A blockchain network is primarily comprised of a set of peer nodes. Peers are a fundamental element of the network because they host ledgers and smart contracts. Recall that a ledger immutably records all the transactions generated by smart contracts. Smart contracts and ledgers are used to encapsulate the shared processes and shared information in a network, respectively. These aspects of a peer make them a good starting point to understand Hyperledger Fabric network.
+一个区块链网络主要由一组peer nodes组成。Peers是网络的一个基础元素，因为它们持有账本和智能合约。请记住，账本不可改变地记录由智能合约生成的所有交易。智能合约和账本用于分别封装网络中的共享处理和共享信息。Peer的这些方面使它们成为理解Hyperledger Fabric网络的突破口。
 
-Other elements of the blockchain network are of course important: ledgers and smart contracts, orderers, policies, channels, applications, organizations, identities, and membership and you can read more about them in their own dedicated topics. This topic focusses on peers, and their relationship to those other elements in a Hyperledger Fabric blockchain network.
+区块链网络的其他元素当然也很重要：账本和智能合约，orderers，policies，channels，applications，organizations，identities和会员，你可以在分别介绍他们的章节中获得更多信息。本章关注的是peers以及在Hyperledger Fabric区块链网络中peers与那些其他元素之间的关系。
+
 ![](images/peers.diagram.1.png)
-A blockchain network is formed from peer nodes, each of which can hold copies of ledgers and copies of smart contracts. In this example, the network N is formed by peers P1, P2 and P3. P1, P2 and P3 each maintain their own instance of the ledger L1. P1, P2 and P3 use chaincode S1 to access their copy of the ledger L1.
 
-Peers can be created, started, stopped, reconfigured, and even deleted. They expose a set of APIs that enable administrators and applications to interact with the services that they provide. We’ll learn more about these services in this topic.
+一个区块链网络是有peer nodes构成的，每一个peer node都可以持有账本和智能合约的副本。在这个示例中，网络N是由peers P1，P2和P3组成的。P1，P2和P3每一个单独维护他们自己的账本L1的实例。P1，P2和P3使用chaincode S1来访问账本L1的副本。
+
+Peers可以被创建、启动、停止、重新配置甚至是删除。它们暴露了一些APIs，使得管理员和应用实现与服务的交互。我们将在本章后续部分深入探讨这些服务。
 #####A word on terminology#####
-Hyperledger Fabric implements smart contracts with a technology concept it calls chaincode – simply a piece of code that accesses the ledger, written in one of the supported programming languages. In this topic, we’ll usually use the term chaincode, but feel free to read it as smart contract if you’re more used to this term. It’s the same thing!
-#####Ledgers and Chaincode#####
-Let’s look at a peer in a little more detail. We can see that it’s the peer that hosts both the ledger and chaincode. More accurately, the peer actually hosts instances of the ledger, and instances of chaincode. Note that this provides a deliberate redundancy in a Fabric network – it avoids single points of failure. We’ll learn more about the distributed and decentralized nature of a blockchain network later in this topic.
+Hyperledger Fabric采用一种技术概念来实现智能合约，它称为chaincode——简单地说是一种访问账本的代码，用支持的一种编程语言编写。在本主题中，我们通常使用术语chaincode，但是如果你更习惯智能合约这个术语也是可以的。智能合约和chaincode是一回事！
+#####Ledgers和Chaincode#####
+让我们进一步看看一个peer。我们可以看到，是peer持有账本和chaincode。更准确地说，peer实际上持有账本的实例和chaincode的实例。注意，在Fabric网络中这是有意提供的冗余--它避免了单点故障。我们将在本主题后续部分了解更多关于区块链网络的分布式和分散特性。
+
 ![](images/peers.diagram.2.png)
-A peer hosts instances of ledgers and instances of chaincodes. In this example, P1 hosts an instance of ledger L1 and an instance of chaincode S1. There can be many ledgers and chaincodes hosted on an individual peer.
 
-Because a peer is a host for ledgers and chaincodes, applications and administrators must interact with a peer if they want to access these resources. That’s why peers are considered the most fundamental building blocks of a Hyperledger Fabric blockchain network. When a peer is first created, it has neither ledgers nor chaincodes. We’ll see later how ledgers get created, and chaincodes get installed, on peers.
+一个peer持有账本的实例和chaincode的实例。在这个示例中，P1持有账本实例L1和chaincode实例S1。在一个单独的peer上，可以持有多个账本和chaincode实例。
+
+由于peer持有账本和chaincode，所以当应用和管理员要访问这些资源时，必须与peer交互。这就是为什么peers被当做Hyperledger Fabric区块链网络中的最最基础的模块。当一个peer被初次创建时，既没有账本也没有chaincode。后面我们将学习账本是如何在peer上创建的以及chaincode是如何在peer上被安装的。
 ######Multiple Ledgers######
-A peer is able to host more than one ledger, which is helpful because it allows for a flexible system design. The simplest peer configuration is to have a single ledger, but it’s absolutely appropriate for a peer to host two or more ledgers when required.
+一个peer可以持有不止一个账本，这是很有用的设计，因为这样实现了一个灵活的系统设计。最简单的peer配置是只有单个账本，但是如果需要，一个peer持有两个或多个账本也是合理的。
+
 ![](images/peers.diagram.3.png)
-A peer hosting multiple ledgers. Peers host one or more ledgers, and each ledger has zero or more chaincodes that apply to them. In this example, we can see that the peer P1 hosts ledgers L1 and L2. Ledger L1 is accessed using chaincode S1. Ledger L2 on the other hand can be accessed using chaincodes S1 and S2.
 
-Although it is perfectly possible for a peer to host a ledger instance without hosting any chaincodes which access it, it’s very rare that peers are configured this way. The vast majority of peers will have at least one chaincode installed on it which can query or update the peer’s ledger instances. It’s worth mentioning in passing whether or not users have installed chaincodes for use by external applications, peers also have special system chaincodes that are always present. These are not discussed in detail in this topic.
+一个peer持有多个账本。Peers持有一个或多个账本，并且每一个账本有0或多个chaincode应用在其上。在这个示例中，我们可以看到peer P1持有账本L1和L2。账本L1通过使用chaincode S1来访问。账本L2可以使用chaincode S1和S2来访问。
+
+虽然一个peer持有一个账本实例而不持有任何访问该账本的chaincode是可能的，但是以这种方式来配置peers是十分罕见的。绝大多数的peers会至少持有一个chaincode，用于查询或更新该peer的账本实例。值得一提的是，无论用户是否安装了外部应用程序所需使用的chaincode，peers总是存在的特殊system chaincodes可以使用。这些在本主题中没有详细讨论。
 ######Multiple Chaincodes######
-There isn’t a fixed relationship between the number of ledgers a peer has and the number of chaincodes that can access that ledger. A peer might have many chaincodes and many ledgers available to it.
+一个peer拥有的账本数量和访问账本的chaincode的数量之间没有应该固定的关系。一个peer可以有多个chaincodes和多个账本。
+
 ![](images/peers.diagram.4.png)
-An example of a peer hosting multiple chaincodes. Each ledger can have many chaincodes which access it. In this example, we can see that peer P1 hosts ledgers L1 and L2. L1 is accessed by chaincodes S1 and S2, whereas L2 is accessed by S3 and S1. We can see that S1 can access both L1 and L2.
 
-We’ll see a little later why the concept of channels in Hyperldeger Fabric is important when hosting multiple ledgers or multiple chaincodes on a peer.
-#####Applications and Peers#####
-We’re now going to show how applications interact with peers to access the ledger. Ledger-query interactions involve a simple three step dialogue between an application and a peer; ledger-update interactions are a little more involved, and require two extra steps. We’ve simplified these steps a little to help you get started with Hyperledger Fabric, but don’t worry – what’s most important to understand is the difference in application-peer interactions for ledger-query compared to ledger-update transaction styles.
+一个peer持有多个chaincodes的示例。每一个账本可以由多个chaincodes来访问。在这个示例中，我们可以看到peer P1持有账本L1和L2。L1通过chaincodes S1和S2来访问；L2通过S3和S1来访问。也就是说，S1既可以访问L1也可以访问L2。
 
-Applications always connect to peers when they need to access ledgers and chaincodes. The Hyperledger Fabric Software Development Kit (SDK) makes this easy for programmers – its APIs enable applications to connect to peers, invoke chaincodes to generate transactions, submit transactions to the network that will get ordered and committed to the distributed ledger, and receive events when this process is complete.
+在稍后章节，我们会学习当一个peer持有多个账本或多个chaincodes时，为什么channels的概念在Hyperledger Fabric中是如此的重要。
+#####Applications和Peers#####
+现在我们将展示应用程序如何与peers交互来访问账本。账本查询交互涉及应用程序和peer之间的简单的三步对话；账本更新交互涉及得较多，需要两个额外的步骤。我们已经简化了这些步骤，以帮助您开始使用Hyperledger Fabric，但不用担心——最重要的是要了解在application-peer交互过程中，对账本查询和账本更新交易类型的差异处理。
 
-Through a peer connection, applications can execute chaincodes to query or update the ledger. The result of a ledger query transaction is returned immediately, whereas ledger updates involve a more complex interaction between applications, peers, and orderers. Let’s investigate in a little more detail.
+当应用程序需要访问账本和chaincodes时，他们通常是连接到对应的peers上来实现。Hyperledger Fabric Software Development Kit（SDK）为开发者简化了这些操作--它的APIs帮助应用程序连接到peers，调用chaincodes来生成交易，向网络提交交易（这些交易会被排序和记录到分布式账本）并且当处理完成时接收相应事件。
+
+通过一个peer连接，应用程序可以执行chaincodes来查询或更新账本。账本查询交易的结果是立即返回的，但账本更新涉及一些复杂的交互，这些交互发生在应用程序、peers和orderers之间。让我们看的深入一些。
+
 ![](images/peers.diagram.6.png)
-Peers, in conjunction with orderers, ensure that the ledger is kept up-to-date on every peer. In this example application A connects to P1 and invokes chaincode S1 to query or update the ledger L1. P1 invokes S1 to generate a proposal response that contains a query result or a proposed ledger update. Application A receives the proposal response, and for queries the process is now complete. For updates, A builds a transaction from the all the responses, which it sends it to O1 for ordering. O1 collects transactions from across the network into blocks, and distributes these to all peers, including P1. P1 validates the transaction before applying to L1. Once L1 is updated, P1 generates an event, received by A, to signify completion.
 
-A peer can return the results of a query to an application immediately because all the information required to satisfy the query is in the peer’s local copy of the ledger. Peers do not consult with other peers in order to return a query to an application. Applications can, however, connect to one or more peers to issue a query – for example to corroborate a result between multiple peers, or retrieve a more up-to-date result from a different peer if there’s a suspicion that information might be out of date. In the diagram, you can see that ledger query is a simple three step process.
+Peers，结合orderers，确保每一个peer之上的账本是最新的。在这个示例中，应用程序A连接到P1并调用chaincode S1来查询或更新账本L1。P1调用S1来生成建议响应，该建议响应包含查询结果或是建议的账本更新操作。应用程序A接收到建议响应，对于查询本次处理结束。对于更新操作，应用程序A根据所有的响应结果构建一个交易，并将其发送给O1来进行排序。O1从整个网络收集交易信息并处理到blocks中，并将结果分配给所有的peers，包括P1。P1在将其应用到L1之前会验证该笔交易。一旦L1被更新，P1会生成一个事件来标识完成，并发送给应用程序A。
 
-An update transaction starts in the same way as a query transaction, but has two extra steps. Although ledger-updating applications also connect to peers to invoke a chaincode, unlike with ledger-querying applications, an individual peer cannot perform a ledger update at this time, because other peers must first agree to the change – a process called consensus. Therefore, peers return to the application a proposed update – one that this peer would apply subject to other peers’ prior agreement. The first extra step – four – requires that applications send an appropriate set of matching proposed updates to the entire network of peers as a transaction for commitment to their respective ledgers. This is achieved by the application using an orderer to package transactions into blocks, and distribute them to the entire network of peers, where they can be verified before being applied to each peer’s local copy of the ledger. As this whole ordering processing takes some time to complete (seconds), the application is notified asynchronously, as shown in step five.
+一个peer能立即返回查询结果给应用程序，是因为查询所需的所有条件都存储在该peer的本地账本副本中。Peers不需要与其他peers商榷就可以返回查询结果给应用程序。应用程序可以连接到一个或多个peers来发布查询--例如在多个peers之间证实一个结果或者如果怀疑信息过期时从另一个peer获取最新的结果。在上面图表中，你可以看到账本查询是一个简单的三步处理。
 
-Later in this topic, you’ll learn more about the detailed nature of of this ordering process – and for a really detailed look at this process see the Transaction Flow topic.
-#####Peers and Channels#####
-Although this topic is about peers rather than channels, it’s worth spending a little time understanding how peers interact with each other, and applications, via channels – a mechanism by which a set of components within a blockchain network can communicate and transact privately.
+更新事务以与查询事务相同的方式启动，但有两个额外的步骤。虽然账本更新应用程序也连接到peers来调用一个chaincode，但是不同于账本查询应用程序，一个单独的peer在此时不能执行账本更新，因为其他peers必须先认同本次改变--一个叫做共识的过程。因此，peers返回应用程序一个建议更新的结果--该peer会服从其他peers的事先协议（发生较早的交易）。第一个额外步骤（步骤4）--要求应用程序向整个peers网络发送一组适当的建议更新，作为对各自账本的承诺的交易。这是由应用程序使用一个orderer将交易打包成blocks，并将它们分发给peers的整个网络来实现的，在它们被应用到每个peer的本地账本副本之前，可以对它们进行验证。由于整个排序处理需要一些时间完成（秒级），所以应用程序被异步通知，如步骤五所示。
 
-These components are typically peer nodes, orderer nodes, and applications, and by joining a channel they agree to come together to collectively share and manage identical copies of the ledger for that channel. Conceptually you can think of channels as being similar to groups of friends (though the members of a channel certainly don’t need to be friends!). A person might have several groups of friends, with each group having activities they do together. These groups might be totally separate (a group of work friends as compared to a group of hobby friends), or there can be crossover between them. Nevertheless each group is its own entity, with “rules” of a kind.
+在本章稍后部分，你将学习该排序处理的更多详细特性。
+#####Peers和Channels#####
+虽然本章是关于peers的而不是关于channels的，但是花一定时间来理解peers是如何通过channels与其他peers，应用程序交互是值得的--区块链网络中的一组组件可以私下通信和处理的机制。
+
+这些组件通常是peer nodes，orderer nodes和应用程序，并且通过加入一个channel一起来共同共享和管理该channel的账本的完全相同副本。从概念上讲，你可以认为channels和朋友组相似（虽然一个channel的成员不需要是朋友！）一个人可能有好几个朋友组，每个小组都有他们一起做的活动。这些群体可能是完全分离的（一组工作上朋友，一组爱好相同的朋友），或者它们之间可以有交叉。然而，每一个群体都是自己的实体，具有一种“规则”。
+
 ![](images/peers.diagram.5.png)
-Channels allow a specific set of peers and applications to communicate with each other within a blockchain network. In this example, application A can communicate directly with peers P1 and P2 using channel C. You can think of the channel as a pathway for communications between particular applications and peers. (For simplicity, orderers are not shown in this diagram, but must be present in a functioning network.)
 
-We see that channels don’t exist in the same way that peers do – it’s more appropriate to think of a channel as a logical structure that is formed by a collection of physical peers. It is vital to understand this point – peers provide the control point for access to, and management of, channels.
-#####Peers and Organizations#####
-Now that you understand peers and their relationship to ledgers, chaincodes and channels, you’ll be able to see how multiple organizations come together to form a blockchain network.
+Channels允许一个特定的peers和应用程序集合在区块链网络中彼此通信。在这个示例中，应用程序A可以使用channel C直接与peers P1和P2通信。你可以将channel看作是特定应用程序和peers之间通信的途径。（为了简单起见，在这个图中没有显示orderers，但orderers在功能网络中是必须存在的。）
 
-Blockchain networks are administered by a collection of organizations rather than a single organization. Peers are central to how this kind of distributed network is built because they are owned by – and are the connection points to the network for – these organizations.
+我们看到，channels与peers存在的方式不一样--将一个channel理解为物理peers集合组成的逻辑结构更为恰当。理解这一点是至关重要的--peers提供访问和管理channels的控制点。
+#####Peers和Organizations#####
+现在，你理解了peers以及peers与账本、chaincodes和channels之间的关系，那么你就能看透多个组织是如何集合到一起组成一个区块链网络了。
+
+区块链网络被多个组织而并非单个组织所管理。Peers是如何构建这种分布式网络的核心，因为它们是由这些组织拥有的，并且是这些组织的网络连接点。
+
 ![](images/peers.diagram.8.png)
-Peers in a blockchain network with multiple organizations. The blockchain network is built up from the peers owned and contributed by the different organizations. In this example, we see four organizations contributing eight peers to form a network. The channel C connects five of these peers in the network N – P1, P3, P5, P7 and P8. The other peers owned by these organizations have not been joined to this channel, but are typically joined to at least one other channel. Applications that have been developed by a particular organization will connect to their own organization’s peers as well as those of different organizations. Again, for simplicity, an orderer node is not shown in this diagram.
 
-It’s really important that you can see what’s happening in the formation of a blockchain network. The network is both formed and managed by the multiple organizations who contribute resources to it. Peers are the resources that we’re discussing in this topic, but the resources an organization provides are more than just peers. There’s a principle at work here – the network literally does not exist without organizations contributing their individual resources to the collective network. Moreover, the network grows and shrinks with the resources that are provided by these collaborating organizations.
+具有多个组织的区块链网络中的Peers。区块链网络是由不同组织拥有和贡献的peers构成的。在这个示例中，我们看见四个组织贡献了八个peers来构成网络。Channel C连接网络N中的五个peers--P1，P3，P5，P7和P8。这些组织拥有的其他peers没有被加入到该channel，但是这些peers通常被加入到至少一个其他的channel中。已经由特定组织开发的应用程序将连接到它们自己的组织的peers。同样，为了简单起见，在这个图中没有展示orderer node。
 
-You can see that (other than the ordering service) there are no centralized resources – in the example above, the network, N, would not exist if the organizations did not contribute their peers. This reflects the fact that the network does not exist in any meaningful sense unless and until organizations contribute the resources that form it. Moreover, the network does not depend on any individual organization – it will continue to exist as long as one organization remains, no matter which other organizations may come and go. This is at the heart of what it means for a network to be decentralized.
+能看到一个区块链网络的形成过程中发生了什么是十分重要的。网络是由多个组织构成和管理的，这些组织也为网络提供资源。Peers是我们在本主题中讨论的资源，但是组织提供的资源不仅仅是peers。这里有一个原则--如果没有组织将各自的资源贡献给集体网络，网络就不复存在。此外，网络随着这些协作组织提供的资源而增长和缩小（即提供的资源越多，网络越大，反之亦然）。
 
-Applications in different organizations, as in the example above, may or may not be the same. That’s because it’s entirely up to an organization how its applications process their peers’ copies of the ledger. This means that both application and presentation logic may vary from organization to organization even though their respective peers host exactly the same ledger data.
+你可以发现，（除了ordering service）没有集中式的资源--在上述示例中，如果组织不贡献他们的peers，则网络N就不存在了。这反映了一个事实，除非并且只有当组织贡献资源来构成网络，否则网络在任何意义上都没有存在的价值。此外，网络不依赖于任何独立的组织--只要有一个组织存在，则网络就存在，无论别的组织是来还是走。这是网络分散的核心所在。
 
-Applications either connect to peers in their organization, or peers in another organization, depending on the nature of the ledger interaction that’s required. For ledger-query interactions, applications typically connect to their own organization’s peers. For ledger-update interactions, we’ll see later why applications need to connect to peers in every organization that is required to endorse the ledger update.
-#####Peers and Identity#####
-Now that you’ve seen how peers from different organizations come together to form a blockchain network, it’s worth spending a few moments understanding how peers get assigned to organizations by their administrators.
+如上述示例所示，不同组织中的应用程序可以相同也可以不同。这完全取决于一个组织的应用程序如何处理他们peers上的账本副本。这意味着应用和呈现逻辑可以从组织到组织各不相同，即使它们各自的peers拥有完全相同的账本数据。
 
-Peers have an identity assigned to them via a digital certificate from a particular certificate authority. You can read lots more about how X.509 digital certificates work elsewhere in this guide, but for now think of a digital certificate as being like an ID card that provides lots of verifiable information about a peer. Each and every peer in the network is assigned a digital certificate by an administrator from its owning organization.
+应用程序要么连接到组织中的peers，要么连接到另一个组织中的peers，这取决于所需的账本交互的性质。对于“账本-查询”交互，应用程序通常连接到它们自己的组织的peers。对于“账本-更新”交互，我们稍后会看到为什么应用程序需要连接到每个组织中的peers，这些组织需要支持账本更新。
+#####Peers和Identity#####
+现在，你已经看到了不同组织的peers是如何集合在一起并构成一个区块链网络的，因此花点时间来理解peers是如何被管理员分配给组织是值得的。
+
+Peers都会被分配一个身份，这个身份是从一个特定证书颁发机构指定的数字证书。你可以在本指南其他章节获取更多关于X.509数字证书如何工作的信息，但现在将数字证书理解为一个ID卡，它提供了大量关于一个peer的可验证信息。网络中的每个peer都由管理员从其拥有的组织中指派数字证书。
+
 ![](images/peers.diagram.9.png)
-When a peer connects to a channel, its digital certificate identifies its owning organization via a channel MSP. In this example, P1 and P2 have identities issued by CA1. Channel C determines from a policy in its channel configuration that identities from CA1 should be associated with Org1 using ORG1.MSP. Similarly, P3 and P4 are identified by ORG2.MSP as being part of Org2.
 
-Whenever a peer connects using a channel to a blockchain network, a policy in the channel configuration uses the peer’s identity to determine its rights. The mapping of identity to organization is provided by a component called a Membership Service Provider (MSP) – it determines how a peer gets assigned to a specific role in a particular organization and accordingly gains appropriate access to blockchain resources. Moreover, a peer can only be owned by a single organization, and is therefore associated with a single MSP. We’ll learn more about peer access control later in this topic, and there’s an entire topic on MSPs and access control policies elsewhere in this guide. But for now, think of an MSP as providing linkage between an individual identity and a particular organizational role in a blockchain network.
+当一个peer连接到一个channel，它的数字证书通过一个channel MSP来验证它自己的组织。在这个示例中，P1和P2有CA1发行的身份。Channel C的决策来自于其channel配置中的政策：来自CA1的身份应当使用ORG1.MSP与Org1联系在一起。类似的，P3和P4被ORG2.MSP认定为Org2的组成部分。
 
-And to digress for a moment, peers as well as everything that interacts with a blockchain network acquire their organizational identity from their digital certificate and an MSP. Peers, applications, end users, administrators, orderers must have an identity and an associated MSP if they want to interact with a blockchain network. We give a name to every entity that interacts with a blockchain network using an identity – a principal. You can learn lots more about principals and organizations elsewhere in this guide, but for now you know more than enough to continue your understanding of peers!
+当一个peer使用一个channel连接到区块链网络时，该channel配置中的政策会使用该peer的身份来确定其权限。身份到组织的映射是由一个组件提供的，该组件被称为MSP--它确定一个peer如何分配给特定组织中的特定角色，并相应地获得对区块链资源的适当访问权限。此外，一个peer只能被一个组织拥有，并且只能与单个MSP关联。我们将在本章稍后部分进一步学习peer的访问控制，并且在该指南的别处有一个完整的章节专门介绍MSPs和访问控制政策。但是目前，将MSP理解为在区块链网络中提供一个独立身份和一个特定组织角色直接的联系即可。
 
-Finally, note that it’s not really important where the peer is physically located – it could reside in the cloud, or in a data centre owned by one of the organizations, or on a local machine – it’s the identity associated with it that identifies it as owned by a particular organization. In our example above, P3 could be hosted in Org1’s data center, but as long as the digital certificate associated with it is issued by CA2, then it’s owned by Org2.
-#####Peers and Orderers#####
-We’ve seen that peers form a blockchain network, hosting ledgers and chaincodes contracts which can be queried and updated by peer-connected applications. However, the mechanism by which applications and peers interact with each other to ensure that every peer’s ledger is kept consistent is mediated by special nodes called orderers, and it’s these nodes to which we now turn our attention.
+稍稍扯远一点，peers以及与区块链网络交互的所有事物都从他们的数字证书和MSP中获取他们的组织身份。Peers、应用程序、终端用户、管理员、orderers如果想与区块链网络交互，就必须具有身份和关联的MSP。我们使用一个身份给每个与区块链交互的实体命名--一个主体（a principal）。在本指南中，你可以学到更多关于主体和组织的知识，但是现在你知道的足够多，可以继续学习peers了。
 
-An update transaction is quite different to a query transaction because a single peer cannot, on its own, update the ledger – it requires the consent of other peers in the network. A peer requires other peers in the network to approve a ledger update before it can be applied to a peer’s local ledger. This process is called consensus – and takes much longer to complete than a query. But when all the peers required to approve the transaction do so, and the transaction is committed to the ledger, peers will notify their connected applications that the ledger has been updated. You’re about to be shown a lot more detail about how peers and orderers manage the consensus process in this section.
+最后，请注意，peer的物理存储地点不是很重要--它可能在云里，可能被一个数据中心的一个组织所拥有，或者存在于一个本地机器--是他关联的身份标识了它被一个特定组织所拥有。在上述示例中，P3可以存储在Org1的数据中心，但是只要他关联的数字证书是CA2发行的，那么它就是属于Org2的。
+#####Peers和Orderers#####
+我们已经看到，peers构成了一个区块链网络，托管账本和chaincodes合同，可以通过peer-connected的应用程序查询和更新。然而，应用程序和peers彼此交互以确保每个peer的账本保持一致的机制是由称为orderers的特殊nodes所提供的，这些节点是我们现在要学习的知识。
 
-Specifically, applications that want to update the ledger are involved in a 3-phase process, which ensures that all the peers in a blockchain network keep their ledgers consistent with each other. In the first phase, applications work with a subset of endorsing peers, each of which provide an endorsement of the proposed ledger update to the application, but do not apply the proposed update to their copy of the ledger. In the second phase, these separate endorsements are collected together as transactions and packaged into blocks. In the final phase, these blocks are distributed back to every peer where each transaction is validated before being applied to that peer’s copy of the ledger.
+一笔更新交易与一笔查询交易十分不同，因为单个peer靠它自己无法更新账本--它需要网络中其他peers的同意。在账本更新操作被应用到本地账本之前，一个peer需要网络中的其他peers来批准本次更新。这种处理被称为共识--与查询相比会花费更长时间。但当所有所需peers批准了该笔交易，该交易会被提交到账本，peers也会通知连接它们的应用程序账本已经被更新了。在本章，你会学到peers和orderers如何管理共识处理的详细信息。
 
-As you will see, orderer nodes are central to this process – so let’s investigate in a little more detail how applications and peers use orderers to generate ledger updates that can be consistently applied to a distributed, replicated ledger.
-#####Phase1:Proposal#####
-Phase 1 of the transaction workflow involves an interaction between an application and a set of peers – it does not involve orderers. Phase 1 is only concerned with an application asking different organizations’ endorsing peers to agree to the results of the proposed chaincode invocation.
+具体地说，想要更新账本的应用程序处理过程涉及3个阶段，这三个阶段确保了区块链网络中的所有peers保持它们的账本彼此一致。在第一阶段，应用程序与背书peers的子集一起工作，每一个背书peer都为应用程序提供提议账本更新的背书，但不会将建议的更新应用到账本的副本。在第二阶段，这些分散的背书作为交易被收集在一起并打包成blocks。在最后阶段，这些blocks被分发回每个peer，在peer上每笔交易在被应用到该peer的账本副本之前都会被验证。
 
-To start phase 1, applications generate a transaction proposal which they send to each of the required set of peers for endorsement. Each peer then independently executes a chaincode using the transaction proposal to generate a transaction proposal response. It does not apply this update to the ledger, but rather the peer signs it and returns to the application. Once the application has received a sufficient number of signed proposal responses, the first phase of the transaction flow is complete. Let’s examine this phase in a little more detail.
+你会发现，orderer节点是这个过程的核心--因此，让我们更详细地研究应用程序和peers如何使用orderers来生成可以持续应用于分布式、复制的账本的账本更新。
+#####阶段1:提议#####
+交易工作流的阶段1涉及应用程序和一个peers集合之间的交互--它不涉及orderers。阶段1仅关注一个应用程序请求不同组织的背书peers同意所提议的chaincode调用的结果。
+
+为了启动阶段1，应用程序生成一个交易提议，并发送给所需的一组peers进行背书操作。然后每个peer独立地使用交易提议执行chaincode来生成交易提议响应。它不将此更新应用于账本，而是peer签名并返回给应用程序。一旦应用程序收到足够数量的签名提议响应，交易流程的第一阶段就完成了。让我们更详细地查看这个阶段。
+
 ![](images/peers.diagram.10.png)
-Transaction proposals are independently executed by peers who return endorsed proposal responses. In this example, application A1 generates transaction T1 proposal P which it sends to both peer P1 and peer P2 on channel C. P1 executes S1 using transaction T1 proposal P generating transaction T1 response R1 which it endorses with E1. Independently, P2 executes S1 using transaction T1 proposal P generating transaction T1 response R2 which it endorses with E2. Application A1 receives two endorsed responses for transaction T1, namely E1 and E2.
 
-Initially, a set of peers are chosen by the application to generate a set of proposed ledger updates. Which peers are chosen by the application? Well, that depends on the endorsement policy (defined for a chaincode), which defines the set of organizations that need to endorse a proposed ledger change before it can be accepted by the network. This is literally what it means to achieve consensus – every organization who matters must have endorsed the proposed ledger change before it will be accepted onto any peer’s ledger.
+交易提议由peers独立执行，并返回背书提议响应。在这个示例中，应用程序A1生成交易T1提议P，该提议被发送给channel C的peer P1和peer P2。P1使用交易T1提议P执行S1生成了交易T1响应R1,并使用E1进行背书。P2独立地使用交易T1提议P执行S1生成交易T1响应R2并使用E2进行背书。应用程序A1接收到交易T1的两个背书响应，并命名为E1和E2。
 
-A peer endorses a proposal response by adding its digital signature, and signing the entire payload using its private key. This endorsement can be subsequently used to prove that this organization’s peer generated a particular response. In our example, if peer P1 is owned by organization Org1, endorsement E1 corresponds to a digital proof that “Transaction T1 response R1 on ledger L1 has been provided by Org1’s peer P1!”.
+一开始，应用程序会选取一组peers来生成一组提议账本更新。应用程序会选择那些peers？好吧，这取决于背书政策（defined for a chaincode），背书政策定义了在提议账本被网络接受之前需要进行背书操作的组织集合。从字面上看，这意味着达成共识--每一个重要的组织都必须在提议账本被任何peers的账本接受之前，对提议的账本变更进行背书。
 
-Phase 1 ends when the application receives signed proposal responses from sufficient peers. We note that different peers can return different and therefore inconsistent transaction responses to the application for the same transaction proposal. It might simply be that the result was generated a different time on different peers with ledgers at different states – in which case an application can simply request a more up-to-date proposal response. Less likely, but much more seriously, results might be different because the chaincode is non-deterministic. Non-determinism is the enemy of chaincodes and ledgers and if it occurs it indicates a serious problem with the proposed transaction, as inconsistent results cannot, obviously, be applied to ledgers. An individual peer cannot know that their transaction result is non-deterministic – transaction responses must be gathered together for comparison before non-determinism can be detected. (Strictly speaking, even this is not enough, but we defer this discussion to the transaction topic, where non-determinism is discussed in detail.)
+一个peer通过添加它的数字签名来背书提议响应，并使用私钥来签名整个载体（payload）。该背书随后可以被用来证明该组织的peer生成了一个特定的响应。在我们的示例中，如果peer P1被组织Org1所拥有，背书E1会绑定一个数字证据“账本L1上的交易T1响应R1是由Org1的peer P1提供的”。
 
-At the end of phase 1, the application is free to discard inconsistent transaction responses if it wishes to do so, effectively terminating the transaction workflow early. We’ll see later that if an application tries to use an inconsistent set of transaction responses to update the ledger, it will be rejected.
-#####Phase2:Packaging#####
-The second phase of the transaction workflow is the packaging phase. The orderer is pivotal to this process – it receives transactions containing endorsed transaction proposal responses from many applications. It orders each transaction relative to other transactions, and packages batches of transactions into blocks ready for distribution back to all peers connected to the orderer, including the original endorsing peers.
+当应用程序从足够多的peers接收到签名提议响应，阶段1就结束了。我们注意到，不同的peers可以返回不同的结果，因此对于同一个交易提议，应用程序接收到的交易响应也是不一致的。简单地说，结果是在不同的状态下在不同的对等体上产生不同的结果，在这种情况下，应用程序可以简单地请求一个更新的建议响应。不太可能，但更严重的是，chaincode的不确定性导致了结果的差异性。不确定性是chaincodes和账本的敌人，并且如果发生了则表明提议交易出了严重的问题，因为不一致的结果很显然不能被应用到账本。一个独立的peer不可能知道它们的交易结果是非确定性的--在不确定被检测到之前，交易响应就会被收集并比较。（严格地说，即使这样也是不够的，但是我们将这个讨论推迟到交易主题，其中非确定性被详细讨论。）
+
+在阶段1结束时，应用程序如果希望，可以自由地丢弃不一致的交易响应，尽早地、有效地终止交易工作流。稍后我们会看到，如果应用程序试图使用一组不一致的交易响应来更新账本，该操作会被拒绝。
+#####阶段2:打包#####
+交易工作流的第二个阶段是打包阶段。Orderer是该处理的核心--它接收包含多个应用程序提供的背书交易提议响应的交易信息。它相对于其他交易将每一个交易排序，并将批量交易打包成blocks，以便分发回连接到orderer的所有peers，包括最初的背书peers。
+
 ![](images/peers.diagram.11.png)
-The first role of an orderer node is to package proposed ledger updates. In this example, application A1 sends a transaction T1 endorsed by E1 and E2 to the orderer O1. In parallel, Application A2 sends transaction T2 endorsed by E1 to the orderer O1. O1 packages transaction T1 from application A1 and transaction T2 from application A2 together with other transactions from other applications in the network into block B2. We can see that in B2, the transaction order is T1,T2,T3,T4,T6,T5 – which may not be the order in which these transactions arrived at the orderer node! (This example shows a very simplified orderer configuration.)
 
-An orderer receives proposed ledger updates concurrently from many different applications in the network on a particular channel. Its job is to arrange these proposed updates into a well-defined sequence, and package them into blocks for subsequent distribution. These blocks will become the blocks of the blockchain! Once an orderer has generated a block of the desired size, or after a maximum elapsed time, it will be sent to all peers connected to it on a particular channel. We’ll see how this block is processed in phase 3.
+一个orderer节点的首要角色是打包提议账本更新。在这个示例中，应用程序A1发送一个被E1和E2背书的交易T1到orderer O1。并行地，应用程序A2发送被E1背书的交易T2到orderer O1。O1将来自应用程序A1的交易T1和来自应用程序A2的交易T2以及来自网络中其他应用程序的其他交易打包到block B2。在B2中我们可以看到，交易顺序是T1，T2，T3，T4，T6，T5--可能与这些交易到达该orderer节点的顺序不一致！（该示例展示了一个非常简化的orderer配置。）
 
-It’s worth noting that the sequencing of transactions in a block is not necessarily the same as the order of arrival of transactions at the orderer! Transactions can be packaged in any order into a block, and it’s this sequence that becomes the order of execution. What’s important is that there is a strict order, rather than what that order is.
+一个orderer从网络中特定的channel上的许多不同应用程序接收所提议的账本更新。它的工作是将这些提议更新安排成一个定义良好的序列，并将它们打包成blocks便于后续的分发。这些blocks将成为区块链的blocks！一旦orderer生成了所需大小的block，或者在经过了最大时间之后，block将被发送到特定channel上连接到它的所有peers。我们将在阶段3看到这个块是如何被处理的。
 
-This strict ordering of transactions within blocks makes Hyperledger Fabric a little different to some other blockchains where the same transaction can be packaged into multiple different blocks. In Hyperledger Fabric, this cannot happen – the blocks generated by a collection of orderers are said to be final because once a transaction has been written to a block, its position in the ledger is immutably assured. Hyperledger Fabric’s finality means that a disastrous occurrence known as a ledger fork cannot occur. Once transactions are captured in a block, history cannot be be rewritten for that transaction at a future point in time.
+值得注意的是，一个block中的交易顺序不一定与交易到达orderer的顺序相同。交易可以按任意顺序打包成一个block，并且这个序列会成为执行顺序。重要的是这里要有一个严格的顺序，至于顺序是什么就不那么重要了。
 
-We can see also see that whereas peers host the ledger and chaincodes, orderers most definitely do not. Every transaction that arrives at an orderer is mechanically packaged in a block – the orderer makes no judgement as to the value of a transaction, it simply packages it. That’s an important behavior of Hyperledger Fabric – all transactions are marshalled into in a strict order – transactions are never dropped or de-prioritized.
+Blocks内交易的严格排序使得Hyperledger Fabric与其他一些区块链略有不同，在有些区块链中相同的交易可以打包成多个不同的blocks。在Hyperledger Fabric中，这是不可能发生的--因为一旦交易已被写入一个块，它在账本中的位置是不可改变的，因此，由一个orderers集合生成的blocks被认为是最终的。Hyperledger Fabric的最终确定意味着一种叫做账本fork的灾难性事件不可能发生。一旦交易被封装进一个block，就不能在将来的某个时间点为该交易重写历史记录。
 
-At the end of phase 2, we see that orderers have been responsible for the simple but vital processes of collecting proposed transaction updates, ordering them, packaging them into blocks, ready for distribution.
-#####Phase3:Validation#####
-The final phase of the transaction workflow involves the distribution and subsequent validation of blocks from the orderer to the peers, where they can be applied to the ledger. Specifically, at each peer, every transaction within a block is validated to ensure that it has been consistently endorsed by all relevant organizations before it is applied to the ledger. Failed transactions are retained for audit, but are not applied to the ledger.
+我们还可以看到，尽管peers持有账本和chaincodes，但orderers肯定不会这样做。每一个到达orderer的交易都被机械地打包到一个block中--orderer对交易的价值不作判断，只是简单地打包。这是Hyperledger Fabric的一个重要行为--所有交易都按严格的顺序编排--交易从不会被丢弃或取消优先级。
+
+在阶段2结束时，我们看到，orderers负责简单但是至关重要的处理，处理涉及收集提议交易更新，对他们排序，将他们打包到blocks并准备分发。
+#####阶段3:验证#####
+交易工作流的最后阶段涉及从orderer到peers的blocks的distribution和subsequent验证，blocks可以在peers上于账本。具体地说，在每个peer上，一个block内的每一笔交易都被验证，以确保它被应用到账本之前已经被所有的相关组织取得共识。保留失败的交易用于审计，但不会被应用到账本。
+
 ![](images/peers.diagram.12.png)
-The second role of an orderer node is to distribute blocks to peers. In this example, orderer O1 distributes block B2 to peer P1 and peer P2. Peer P1 processes block B2, resulting in a new block being added to ledger L1 on P1. In parallel, peer P2 processes block B2, resulting in a new block being added to ledger L1 on P2. Once this process is complete, the ledger L1 has been consistently updated on peers P1 and P2, and each may inform connected applications that the transaction has been processed.
 
-Phase 3 begins with the orderer distributing blocks to all peers connected to it. Peers are connected to orderers on channels such that when a new block is generated, all of the peers connected to the orderer will be sent a copy of the new block. Each peer will process this block independently, but in exactly the same way as every other peer on the channel. In this way, we’ll see that the ledger can be kept consistent. It’s also worth noting that not every peer needs to be connected to an orderer – peers can cascade blocks to other peers using the gossip protocol, who also can process them independently. But let’s leave that discussion to another time!
+Orderer节点的第二个角色是将blocks分配给peers。在这个示例中，orderer O1将block B2分发给peer P1和peer P2。Peer P1处理block B2，最终将一个新的block追加到P1的账本L1。并行地，peer P2处理block B2，最终将一个新的block追加到P2的账本L1。一旦处理完成，账本L1就实现了在peers P1和P2上的一致更新，并且任何一个都可以通知连接的应用程序交易已经被处理完成。
 
-Upon receipt of a block, a peer will process each transaction in the sequence in which it appears in the block. For every transaction, each peer will verify that the transaction has been endorsed by the required organizations according to the endorsement policy of the chaincode which generated the transaction. For example, some transactions may only need to be endorsed by a single organization, whereas others may require multiple endorsements before they are considered valid. This process of validation verifies that all relevant organizations have generated the same outcome or result.
+Orderer将blocks分发给所有连接到orderer上的peers标识着阶段3的开始。Peers都通过channels连接到orderers上，因此，当一个新的block被生成时，所有连接到orderer的peers都会获取一份新block的副本。每个peer都会独立地处理该block，但是channel上的每一个peer处理该block的方式都是一样的。通过这种方式，账本可以实现一致性更新。需要注意的是，并不是所有的peer都需要连接到一个orderer上--peers可以使用八卦协议（gossip protocol）从其他peers获取blocks，这些peers也可以独立地处理这些blocks。这个问题我们后面再讨论。
 
-If a transaction has been endorsed correctly, the peer will attempt to apply it to the ledger. To do this, a peer must perform a ledger consistency check to verify that the current state of the ledger is compatible with the state of the ledger when the proposed update was generated. This may not always be possible, even when the transaction has been fully endorsed. For example, another transaction may have updated the same asset in the ledger such that the transaction update is no longer valid and therefore can no longer be applied. In this way each peer’s copy of the ledger is kept consistent across the network because they each follow the same rules for validation.
+在接收到一个block后，peer将按其出现在block中的顺序依次处理每笔交易。对于每笔交易，每个peer将根据生成交易的chaincode的背书策略验证该笔交易已经被所需的组织达成共识。例如，一些交易可能只需要由单个组织认可，而另一些交易在被认为有效之前需要多个背书。这个验证过程验证了所有相关组织都产生了相同的结果。
 
-After a peer has successfully validated each individual transaction, it updates the ledger. Failed transactions are not applied to the ledger, but they are retained for audit purposes, as are successful transactions. This means that peer blocks are almost exactly the same as the blocks received from the orderer, except for a valid or invalid indicator on each transaction in the block.
+如果一笔交易被正确的背书，peer则会尝试将该笔交易追加到账本。要完成这个操作，peer必须执行账本一致性校验来验证账本的当前状态与更新完成时账本状态是否一致。即使交易被完全认可，这也未必总是可行的。例如，另一个交易可能已经更新了账本中的相同资产，从而使得交易更新不再有效，因此不能再被应用。在这种情况下，每个peer的账本副本因为遵循相同的验证规则而保证网络上的一致。
 
-We also note that phase 3 does not require the running of chaincodes – this is only done in phase 1, and that’s important. It means that chaincodes only have to be available on endorsing nodes, rather than throughout the blockchain network. This is often helpful as it keeps the logic of the chaincode confidential to endorsing organizations. This is in contrast to the output of the chaincodes (the transaction proposal responses) which are shared to every peer in the channel, whether or not they endorsed the transaction. This specialization of endorsing peers is designed to help scalability.
+当一个peer在成功验证了每笔独立的交易之后，会更新账本。失败的交易不会被应用到账本，但它们会为了审计目的而保留，如同成功的交易一样。这意味着，除了block中每笔交易的有效或无效指示符外，peer blocks几乎与从orderer接收的blocks完全相同。
 
-Finally, every time a block is committed to to a peer’s ledger, that peer generates an appropriate event. Block events include the full block content, while block transaction events include summary information only, such as whether each transaction in the block has been validated or invalidated. Chaincode events that the chaincode execution has produced can also be published at this time. Applications can register for these event types so that they can be notified when they occur. These notifications conclude the third and final phase of the transaction workflow.
+我们还注意到，阶段3不需要运行着的chaincodes--这只是在阶段1完成的，这很重要。这意味着chaincodes只需要在认可节点上可用，而不必在整个区块链网络中可用。这非常有用，因为它实现了chaincode的逻辑对背书组织是保密的。这与chaincodes的输出（交易提议响应）相反，这些输出被共享到channel中的每个peer，不管它们是否支持该交易的背书。背书peers的这种特殊设计是为了实现可扩展性。
 
-In summary, phase 3 sees the blocks which are generated by the orderer consistently applied to the ledger. The strict ordering of transactions into blocks allows each peer to validate that transaction updates are consistently applied across the blockchain network.
-#####Orderers and Consensus#####
-This entire transaction workflow process is called consensus because all peers have reached agreement on the order and content of transactions, in a process that is mediated by orderers. Consensus is a multi-step process and applications are only notified of ledger updates when the process is complete – which may happen at slightly different times on different peers.
+最后，每当一个block被提交到peer的账本时，peer会生成一个对应的事件。Block事件包括完整的block内容，而block交易事件仅包括摘要信息，例如block中的每笔交易是有效还是无效。Chaincode执行所产生的chaincode事件也可以在此时发布。应用程序可以注册这些事件类型，以便在发生事件时可以通知它们。这些通知标识交易工作流第三个阶段（也是最后一个节点）的结束。
 
-We will discuss orderers in a lot more detail in a future orderer topic, but for now, think of orderers as nodes which collect and distribute proposed ledger updates from applications for peers to validate and include on the ledger.
+总之，阶段3见证了那些由orderer生成的blocks被一致性应用到账本。Blocks中交易的严格顺序使得每个peer能够验证该笔交易更新是否被一致性地应用到了整个区块链网络中。
+#####Orderers和Consensus#####
+整个交易工作流的处理被称为共识，因为所有的peers最终就交易的顺序和内容达成了一致，该处理发生在orderers上。共识是一个多步骤的过程，应用程序只在过程完成时被通知账本更新--这可能在不同的时间点发生在不同的peers上。
 
-That’s it! We’ve now finished our tour of peers and the other components that they relate to in Hyperledger Fabric. We’ve seen that peers are in many ways the most fundamental element – they form the network, host chaincodes and the ledger, handle transaction proposals and responses, and keep the ledger up-to-date by consistently applying transaction updates to it.
+我们将在后面的orderer章节讨论的更加详细，但是现在，将orderers视为收集和分发来自peers应用程序的提议账本更新的节点，以验证和包括在账本上。
+
+就是这样！现在我们完成了peers和其他与Hyperledger Fabric相关的组件的学习。我们已经看到，在多种途径下，peers都是最最基础的元素--它们形成网络、主机chaincodes和账本，处理交易提议和响应，并通过不断地向其应用交易更新来保持账本的最新状态。
 ####Ledger####
-The ledger is the sequenced, tamper-resistant record of all state transitions. State transitions are a result of chaincode invocations (“transactions”) submitted by participating parties. Each transaction results in a set of asset key-value pairs that are committed to the ledger as creates, updates, or deletes.
+账本是所有状态交易的有序的、防篡改的记录。状态交易是参与方提交的chaincode调用的结果（“交易”）。每笔交易都会产生一组资产键值对，这些资产键值对作为创建、更新或删除操作被提交。
 
-The ledger is comprised of a blockchain (‘chain’) to store the immutable, sequenced record in blocks, as well as a state database to maintain current state. There is one ledger per channel. Each peer maintains a copy of the ledger for each channel of which they are a member.
+账本由区块链（“chain”）组成的，以存储blocks中不可变的、有序的记录，以及一个维护当前状态的状态数据库。每个channel都有一个账本。每个peer维护其所属channel的账本副本。
 #####Chain#####
-The chain is a transaction log, structured as hash-linked blocks, where each block contains a sequence of N transactions. The block header includes a hash of the block’s transactions, as well as a hash of the prior block’s header. In this way, all transactions on the ledger are sequenced and cryptographically linked together. In other words, it is not possible to tamper with the ledger data, without breaking the hash links. The hash of the latest block represents every transaction that has come before, making it possible to ensure that all peers are in a consistent and trusted state.
+链（“chain”）是一个交易日志，以hash-linked的blocks作为结构，在链中每一个block包含N笔交易的有序集合。Block头包含一个该block的交易的哈希值，以及上一个block头的哈希值。以这种方式，账本上的所有交易被有序的加密链接在一起。换句话说，除非破坏哈希链接，否则想篡改账本数据是不可能的。最新block的哈希值是根据之前所有发生的交易计算出来的，从而确保所有peers处于一致和可信状态。
 
-The chain is stored on the peer file system (either local or attached storage), efficiently supporting the append-only nature of the blockchain workload.
+链存储于peer的文件系统中（无论是本地存储还是附加存储），有效地支持区块链工作负载的只能追加的特性。
 #####State Database#####
-The ledger’s current state data represents the latest values for all keys ever included in the chain transaction log. Since current state represents all latest key values known to the channel, it is sometimes referred to as World State.
+账本的当前状态数据是根据链中包含所有历史交易日志计算得出的。由于当前状态表示channel已知的所有最新键值，因此有时称为“世界状态”。
 
-Chaincode invocations execute transactions against the current state data. To make these chaincode interactions extremely efficient, the latest values of all keys are stored in a state database. The state database is simply an indexed view into the chain’s transaction log, it can therefore be regenerated from the chain at any time. The state database will automatically get recovered (or generated if needed) upon peer startup, before transactions are accepted.
+链码调用针对当前状态数据执行交易。为了使这些chaincode交互高效执行，所有keys的最新值都存储在状态数据库中。状态数据库只是进入链的交易日志的一个索引视图，因此它可以在任何时候从链中重新生成。在接受事务之前，状态数据库将在peer启动时自动恢复（或如果需要的话生成）。
 
-State database options include LevelDB and CouchDB. LevelDB is the default state database embedded in the peer process and stores chaincode data as key-value pairs. CouchDB is an optional alternative external state database that provides addition query support when your chaincode data is modeled as JSON, permitting rich queries of the JSON content. See CouchDB as the State Database for more information on CouchDB.
-#####Transaction Flow#####
-At a high level, the transaction flow consists of a transaction proposal sent by an application client to specific endorsing peers. The endorsing peers verify the client signature, and execute a chaincode function to simulate the transaction. The output is the chaincode results, a set of key-value versions that were read in the chaincode (read set), and the set of keys/values that were written in chaincode (write set). The proposal response gets sent back to the client along with an endorsement signature.
+状态数据库的选项包括LevelDB和CouchDB。LevelDB是内嵌于peer的默认状态数据库，用于以键值对的格式处理和存储chaincode数据。CouchDB是一个可选择的额外的状态数据库，当你的chaincode数据设置为JSON格式是提供了额外的查询支持，支持JSON内容的丰富的查询。
+#####交易流#####
+在高层次上，交易流由应用客户端发送给特定的背书peers的交易提议组成。背书peers验证客户端签名，并执行chaincode功能来模拟交易。输出是chaincode结果，一组键值版本在链式代码（读取集）中读取，以及在链式代码（写集）中写入的一组键/值。提议响应连同背书签名一起发送回客户端。
 
-The client assembles the endorsements into a transaction payload and broadcasts it to an ordering service. The ordering service delivers ordered transactions as blocks to all peers on a channel.
+客户端将背书组装成交易载体并将其广播到一个ordering服务。该ordering服务将有序交易作为blocks传递到channel上的所有peers。
 
-Before committal, peers will validate the transactions. First, they will check the endorsement policy to ensure that the correct allotment of the specified peers have signed the results, and they will authenticate the signatures against the transaction payload.
+在提交之前，peers会验证该交易。首先，他们会检查背书策略来确认所有分配到的特定peers都对该结果签名了，并且他们会针对交易载体认证签名。
 
-Secondly, peers will perform a versioning check against the transaction read set, to ensure data integrity and protect against threats such as double-spending. Hyperledger Fabric has concurrency control whereby transactions execute in parallel (by endorsers) to increase throughput, and upon commit (by all peers) each transaction is verified to ensure that no other transaction has modified data it has read. In other words, it ensures that the data that was read during chaincode execution has not changed since execution (endorsement) time, and therefore the execution results are still valid and can be committed to the ledger state database. If the data that was read has been changed by another transaction, then the transaction in the block is marked as invalid and is not applied to the ledger state database. The client application is alerted, and can handle the error or retry as appropriate.
+其次，peers会针对交易读集合执行一个版本检查，来确认确保数据完整性并防止双重支出等威胁。Hyperledger Fabric有并发控制，从而交易（由endorsers）并行执行以提高吞吐量，并且在提交之后，（由所有peers）验证每笔交易没有被其他交易修改。换言之，它确保在chaincode执行期间读取的数据在执行（认可）时间之后没有改变，因此执行结果仍然是有效的，并且可以提交到账本状态数据库。如果所读取的数据已被另一交易更改，则该block中的交易被标记为无效，并且不应用到账本状态数据库。客户端应用程序被告警，并且可以处理错误或重试。
 
-See the Transaction Flow, Read-Write set semantics, and CouchDB as the State Database topics for a deeper dive on transaction structure, concurrency control, and the state DB.
-#####Use Cases#####
-The Hyperledger Requirements WG is documenting a number of blockchain use cases and maintaining an inventory here.
+请参阅交易流、读写集语义和CoucDB作为状态数据库主题，以便深入研究交易结构、并发控制和状态数据库。
 
 ###三、教程###
 We offer tutorials to get you started with Hyperledger Fabric. The first is oriented to the Hyperledger Fabric application developer, Writing Your First Application. It takes you through the process of writing your first blockchain application for Hyperledger Fabric using the Hyperledger Fabric Node SDK.
